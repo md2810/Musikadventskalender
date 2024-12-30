@@ -46,9 +46,8 @@ h1 {
 }
 
 .cover {
-    width: 100%; /* Bild auf 100% der Breite der Karte */
-    height: 0;
-    padding-bottom: 100%; /* Höhe auf gleiche Größe wie Breite setzen, um es quadratisch zu machen */
+    width: 50vw; /* Bild nimmt 50% der Bildschirmbreite ein */
+    height: 50vw; /* Höhe wird ebenfalls auf 50% der Breite gesetzt, um das Bild quadratisch zu halten */
     background-color: black;
     background-size: cover;
     background-position: center;
@@ -102,8 +101,7 @@ h1 {
     }
 
     .cover {
-        width: 100%; /* Bild bleibt 100% der Breite */
-        height: 0;
-        padding-bottom: 100%; /* Bild bleibt quadratisch */
+        width: 50vw; /* Bild bleibt auf 50% der Breite */
+        height: 50vw; /* Bild bleibt quadratisch */
     }
 }
