@@ -1,7 +1,6 @@
-// auth.js
 const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://musikadventskalender.pages.dev/auth/callback';
+const REDIRECT_URI = process.env.REDIRECT_URI;  // Umgebungsvariable für Redirect-URL
 
 const authUrl = `https://accounts.spotify.com/authorize?client_id=${SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=user-read-currently-playing`;
 
@@ -38,7 +37,7 @@ async function handleRequest(request) {
             }
         });
     }
-    return new Response('Not Found', { status: 404 });
+    return new Response('Nicht gefunden', { status: 404 });
 }
 
 addEventListener('fetch', event => {

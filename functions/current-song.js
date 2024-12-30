@@ -1,4 +1,3 @@
-// current-song.js
 async function handleRequest(request) {
     const cookies = request.headers.get('Cookie') || '';
     const accessToken = cookies.split(';').find(cookie => cookie.trim().startsWith('spotify_access_token')).split('=')[1];
