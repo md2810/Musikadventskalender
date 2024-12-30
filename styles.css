@@ -37,7 +37,7 @@ h1 {
     padding: 32px; /* Padding von 32px */
     background-color: rgba(255, 255, 255, 0.6);;
     border-radius: 32px;
-    width: calc(25vw + 64px);
+    width: 25vw;
     margin: 0 auto;
     gap: 16px;
     cursor: pointer;
@@ -53,7 +53,7 @@ h1 {
     align-items: center;
     padding: 32px; /* Padding von 32px */
     border-radius: 32px;
-    width: auto; /* Gesamtbreite abzüglich Padding (links+rechts) */
+    width: 25vw; /* Gesamtbreite abzüglich Padding (links+rechts) */
     margin: 0 auto;
     gap: 16px;
     cursor: pointer;
