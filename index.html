@@ -20,12 +20,11 @@
                     <p id="artist-name">Keine Wiedergabe</p>
                 </div>
             </div>
+            <div class="notplaying-card" id="no-song-playing" style="display: none;">
+                <p>Gleich geht es los...</p>
+            </div>
             <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
         </div>
-        <div class="notplaying-card" id="no-song-playing" style="display: none;">
-            <p>Gleich geht es los...</p>
-        </div>
-    </div>
     <script>
         const spotifyContainer = document.getElementById("spotify-container");
         const spotifyCard = document.getElementById("now-playing");
