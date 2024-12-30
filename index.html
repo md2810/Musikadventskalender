@@ -135,27 +135,7 @@
             }
         }
     
-        // Marquee-Animation definieren
-        const style = document.createElement("style");
-        style.innerHTML = `
-            @keyframes marquee {
-                0% {
-                    transform: translateX(100%);
-                }
-                100% {
-                    transform: translateX(-100%);
-                }
-            }
-    
-            .marquee {
-                animation: marquee 10s linear infinite;
-                display: inline-block;
-                position: relative;
-            }
-        `;
-        document.head.appendChild(style);
-    
         setInterval(updateNowPlaying, 1000);
-    </script>     
+    </script>       
 </body>
 </html>

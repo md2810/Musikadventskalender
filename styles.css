@@ -134,18 +134,22 @@ h1 {
     }
 }
 
-/* Aktiviert den Marquee-Effekt nur bei zu langem Text */
+/* Marquee-Animation für den Text */
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Marquee-Effekt auf Titeln und Künstlernamen anwenden, wenn notwendig */
 .marquee {
     animation: marquee 10s linear infinite;
     display: inline-block;
-    position: relative; /* Verhindert Überlauf */
-}
-
-#song-title, #artist-name {
-    white-space: nowrap; /* Keine Zeilenumbrüche */
-    overflow: hidden; /* Verhindert Überlauf */
-    text-overflow: ellipsis; /* Zeigt "..." bei statischem Text an */
-    display: block;
-    animation: none; /* Standardmäßig keine Animation */
-    max-width: 100%; /* Passt die Breite an */
+    white-space: nowrap; /* Verhindert Zeilenumbruch */
+    overflow: hidden; /* Verhindert, dass der Text aus der Karte hinausragt */
+    position: relative;
+    padding-right: 100%; /* Gilt als Puffer für den Effekt */
 }
