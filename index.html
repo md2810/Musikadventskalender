@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Warum feiern wir heute?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Musikadventskalender</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,50 +21,46 @@
 
     <script>
         const spotifyContainer = document.getElementById("spotify-container");
-const spotifyCard = document.getElementById("now-playing");
-const loginButton = document.getElementById("login-button");
+        const spotifyCard = document.getElementById("now-playing");
+        const loginButton = document.getElementById("login-button");
 
-async function updateNowPlaying() {
-    const spotifyCard = document.getElementById("now-playing");
-    const loginButton = document.getElementById("login-button");
-
-    const response = await fetch("/now-playing");
-    if (response.status === 401) {
-        spotifyCard.style.display = "none";
-        if (loginButton) {
-            loginButton.style.display = "block";
-        }
-        return;
-    }
-
-    if (response.ok) {
-        const data = await response.json();
-        if (data && data.is_playing) {
-            spotifyCard.style.display = "flex";
-            if (loginButton) {
-                loginButton.style.display = "none";
+        async function updateNowPlaying() {
+            const response = await fetch("/now-playing");
+            if (response.status === 401) {
+                spotifyCard.style.display = "none";
+                if (loginButton) {
+                    loginButton.style.display = "block";
+                }
+                return;
             }
-            document.getElementById("song-title").innerText = data.item.name;
-            document.getElementById("artist-name").innerText = data.item.artists
-                .map((artist) => artist.name)
-                .join(", ");
-            document.getElementById("song-cover").style.backgroundImage = `url(${data.item.album.images[0].url})`;
-        } else {
-            spotifyCard.style.display = "none";
-            if (loginButton) {
-                loginButton.style.display = "none";
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data && data.is_playing) {
+                    spotifyCard.style.display = "flex";
+                    if (loginButton) {
+                        loginButton.style.display = "none";
+                    }
+                    document.getElementById("song-title").innerText = data.item.name;
+                    document.getElementById("artist-name").innerText = data.item.artists
+                        .map((artist) => artist.name)
+                        .join(", ");
+                    document.getElementById("song-cover").style.backgroundImage = `url(${data.item.album.images[0].url})`;
+                } else {
+                    spotifyCard.style.display = "none";
+                    if (loginButton) {
+                        loginButton.style.display = "none";
+                    }
+                }
+            } else {
+                spotifyCard.style.display = "none";
+                if (loginButton) {
+                    loginButton.style.display = "block";
+                }
             }
         }
-    } else {
-        spotifyCard.style.display = "none";
-        if (loginButton) {
-            loginButton.style.display = "block";
-        }
-    }
-}
 
-
-setInterval(updateNowPlaying, 1000);
+        setInterval(updateNowPlaying, 1000);
     </script>
 </body>
 </html>

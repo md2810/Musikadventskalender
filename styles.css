@@ -8,15 +8,25 @@ body {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    font-size: 2em; /* Verdoppele die Schriftgröße */
+    font-size: 1.6em; /* Etwas kleinere Schriftgröße als vorher */
+    overflow: hidden; /* Verhindert das Scrollen auf der Seite */
+}
+
+h1 {
+    text-align: center; /* Zentriert den Titel */
+    font-size: 3em; /* Erhöht die Größe des Haupttitels */
+    margin-bottom: 20px; /* Abstand zwischen Titel und Card */
 }
 
 #spotify-container {
-    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    height: 100vh; /* Container soll immer den Bildschirm ausfüllen */
+    width: 100%;
+    overflow: hidden; /* Verhindert das Scrollen im Container */
+    text-align: center;
 }
 
 .spotify-card {
@@ -24,11 +34,10 @@ body {
     flex-direction: column; /* Vertikale Ausrichtung */
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 32px; /* Padding von 32px auf jeder Seite */
     background-color: #e3e3e3;
     border-radius: 32px;
-    width: 100%;
-    max-width: 500px; /* Maximalbreite der Karte */
+    width: 100vw; /* Breite auf 100% der Bildschirmbreite setzen */
     margin: 0 auto;
     gap: 16px;
     cursor: pointer;
@@ -51,11 +60,13 @@ body {
     font-weight: bold;
     margin: 0;
     color: #333;
+    font-size: 1.8em; /* Etwas kleinere Schriftgröße */
 }
 
 #artist-name {
     margin: 0;
     color: #666;
+    font-size: 1.4em; /* Etwas kleinere Schriftgröße */
 }
 
 #login-button {
@@ -64,7 +75,7 @@ body {
     border: none;
     border-radius: 32px;
     padding: 10px 20px;
-    font-size: 1em;
+    font-size: 1.2em; /* Kleine Anpassung der Schriftgröße */
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -74,29 +85,12 @@ body {
 }
 
 #song-title, #artist-name {
-    font-size: 2em; /* Verdoppele die Schriftgröße für Titel und Künstler */
-}
-
-h1 {
-    text-align: center; /* Zentriert den Titel */
-    font-size: 3em; /* Erhöht die Größe des Haupttitels */
+    font-size: 1.6em; /* Textgröße leicht kleiner */
 }
 
 @media (max-width: 768px) {
-    .spotify-card {
-        width: 100%;
-        max-width: 100%; /* Auch hier die Breite auf 100% setzen */
-    }
-
-    .cover {
-        width: 100%; /* Bild bleibt 100% der Breite */
-        height: 0;
-        padding-bottom: 100%; /* Bild bleibt quadratisch */
-    }
-
-    /* Schriftgröße für mobile Geräte anpassen */
     body {
-        font-size: 1.5em; /* Etwas kleinere Schriftgröße für mobile Geräte */
+        font-size: 1.4em; /* Etwas kleinere Schriftgröße für mobile Geräte */
     }
 
     h1 {
@@ -104,6 +98,12 @@ h1 {
     }
 
     #song-title, #artist-name {
-        font-size: 1.5em; /* Kleinere Schriftgröße auf mobilen Geräten */
+        font-size: 1.4em; /* Kleinere Schriftgröße auf mobilen Geräten */
+    }
+
+    .cover {
+        width: 100%; /* Bild bleibt 100% der Breite */
+        height: 0;
+        padding-bottom: 100%; /* Bild bleibt quadratisch */
     }
 }
