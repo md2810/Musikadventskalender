@@ -22,7 +22,7 @@
             </div>
             <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
         </div>
-        <div class="notplaying-card" id="no-song-card" style="display: none;">
+        <div class="notplaying-card" id="no-song-playing" style="display: none;">
             <p>Gleich geht es los...</p>
         </div>
     </div>
@@ -34,53 +34,49 @@
         let currentSongCover = "";
     
         async function updateNowPlaying() {
-            const response = await fetch("/now-playing");
-            if (response.status === 401) {
-                spotifyCard.classList.remove("show");
-                noSongCard.classList.remove("show");
-                if (loginButton) {
-                    loginButton.style.display = "block";
-                }
-                return;
+    const response = await fetch("/now-playing");
+    if (response.status === 401) {
+        document.getElementById("now-playing").style.display = "none"; // Spotify Card ausblenden
+        document.getElementById("no-song-playing").style.display = "block"; // "Gleich geht es los..." anzeigen
+        if (loginButton) {
+            loginButton.style.display = "block";
+        }
+        return;
+    }
+
+    if (response.ok) {
+        const data = await response.json();
+        if (data && data.is_playing) {
+            document.getElementById("now-playing").style.display = "flex"; // Spotify Card anzeigen
+            document.getElementById("no-song-playing").style.display = "none"; // "Gleich geht es los..." ausblenden
+            if (loginButton) {
+                loginButton.style.display = "none";
             }
-    
-            if (response.ok) {
-                const data = await response.json();
-                if (data && data.is_playing) {
-                    // Song wird abgespielt, zeige die Spotify-Karte
-                    spotifyCard.classList.add("show");
-                    noSongCard.classList.remove("show"); // Verstecke die "Gleich geht es los..."-Karte
-                    if (loginButton) {
-                        loginButton.style.display = "none";
-                    }
-                    document.getElementById("song-title").innerText = data.item.name;
-                    document.getElementById("artist-name").innerText = data.item.artists
-                        .map((artist) => artist.name)
-                        .join(", ");
-                    const songCover = data.item.album.images[0].url;
-                    document.getElementById("song-cover").style.backgroundImage = `url(${songCover})`;
-    
-                    // Hintergrund nur ändern, wenn der Song neu ist
-                    if (songCover !== currentSongCover) {
-                        currentSongCover = songCover;
-                        setDynamicBackground(songCover);
-                    }
-                } else {
-                    // Kein Song wird abgespielt, zeige die "Gleich geht es los..."-Karte
-                    spotifyCard.classList.remove("show");
-                    noSongCard.classList.add("show"); // Zeige die "Gleich geht es los..."-Karte
-                    if (loginButton) {
-                        loginButton.style.display = "none";
-                    }
-                }
-            } else {
-                spotifyCard.classList.remove("show");
-                noSongCard.classList.remove("show");
-                if (loginButton) {
-                    loginButton.style.display = "block";
-                }
+            document.getElementById("song-title").innerText = data.item.name;
+            document.getElementById("artist-name").innerText = data.item.artists
+                .map((artist) => artist.name)
+                .join(", ");
+            const songCover = data.item.album.images[0].url;
+            document.getElementById("song-cover").style.backgroundImage = `url(${songCover})`;
+
+            // Hintergrund mit Farbverlauf aktualisieren
+            setDynamicBackground(songCover);
+        } else {
+            document.getElementById("now-playing").style.display = "none"; // Spotify Card ausblenden
+            document.getElementById("no-song-playing").style.display = "block"; // "Gleich geht es los..." anzeigen
+            if (loginButton) {
+                loginButton.style.display = "none";
             }
         }
+    } else {
+        document.getElementById("now-playing").style.display = "none"; // Spotify Card ausblenden
+        document.getElementById("no-song-playing").style.display = "block"; // "Gleich geht es los..." anzeigen
+        if (loginButton) {
+            loginButton.style.display = "block";
+        }
+    }
+}
+
     
         async function setDynamicBackground(imageUrl) {
             try {
