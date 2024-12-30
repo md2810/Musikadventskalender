@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musikadventskalender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #song-info {
+            margin-top: 20px;
+        }
+        img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Musikadventskalender</h1>
+    <button id="auth-button">Mit Spotify anmelden</button>
+    <div id="song-info"></div>
+
+    <script>
+        document.getElementById('auth-button').addEventListener('click', () => {
+            window.location.href = '/auth';
+        });
+
+        async function fetchSongInfo() {
+            const response = await fetch('/api/current-song');
+            const data = await response.json();
+
+            if (data.song) {
+                document.getElementById('song-info').innerHTML = `
+                    <img src="${data.song.image}" alt="${data.song.name}">
+                    <h2>${data.song.name}</h2>
+                    <p>${data.song.artist}</p>
+                `;
+            }
+        }
+
+        // Fetch song info if authenticated
+        if (window.location.search.includes('code')) {
+            fetchSongInfo();
+        }
+    </script>
+</body>
+</html>
