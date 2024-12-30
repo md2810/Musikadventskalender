@@ -11,6 +11,9 @@ body {
     font-size: 1.6em; /* Allgemeine Textgröße */
     overflow: hidden; /* Verhindert Scrollen */
     transition: background 1s ease;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 
 h1 {
