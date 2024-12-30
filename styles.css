@@ -145,7 +145,7 @@ h1 {
     }
 }
 
-.spotify-card, .title-card, #no-song-card {
+.spotify-card, #no-song-card {
     transition: opacity 1s ease-in-out;
     opacity: 0; /* Initial unsichtbar */
 }
