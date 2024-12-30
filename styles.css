@@ -19,13 +19,6 @@ h1 {
     color: #333; /* Standardfarbe */
 }
 
-/* Die Titelkarte (gleiche Basis wie spotify-card) */
-#title-card {
-    padding: 32px; /* Gleicher Abstand wie bei der spotify-card */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
 #spotify-container {
     display: flex;
     flex-direction: column;
@@ -44,12 +37,30 @@ h1 {
     padding: 32px; /* Padding von 32px */
     background-color: #e3e3e3;
     border-radius: 32px;
-    width: 100vw; /* Gesamtbreite abzüglich Padding (links+rechts) */
+    width: auto; /* Gesamtbreite abzüglich Padding (links+rechts) */
     margin: 0 auto;
     gap: 16px;
     cursor: pointer;
     position: relative;
     text-align: center;
+}
+
+.title-card {
+    display: flex;
+    flex-direction: column; /* Inhalte vertikal ausrichten */
+    justify-content: center;
+    align-items: center;/
+    background-color: #e3e3e3;
+    border-radius: 32px;
+    width: auto; /* Gesamtbreite abzüglich Padding (links+rechts) */
+    margin: 0 auto;
+    gap: 16px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    padding: 32px; /* Gleicher Abstand wie bei der spotify-card */
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .cover {
