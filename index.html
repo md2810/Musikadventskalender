@@ -80,6 +80,9 @@
     
         async function setDynamicBackground(imageUrl) {
             try {
+                // Setze die Transition für den Hintergrund, um den Übergang auszulösen
+                document.body.style.transition = "background 1s ease";  // Übergang auf den Hintergrund anwenden
+    
                 // Bild laden und Canvas verwenden
                 const img = new Image();
                 img.crossOrigin = "Anonymous"; // Wichtig, um CORS-Fehler zu vermeiden
@@ -124,8 +127,7 @@
                     // Generiere Farbverlauf
                     const gradient = `linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}))`;
     
-                    // Sanften Übergang für den Hintergrund anwenden
-                    document.body.style.transition = "background 1s ease";
+                    // Setze den Farbverlauf im Hintergrund
                     document.body.style.background = gradient;
                 };
             } catch (error) {
@@ -134,6 +136,6 @@
         }
     
         setInterval(updateNowPlaying, 1000);
-    </script>    
+    </script>     
 </body>
 </html>
