@@ -2,20 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
 
 body {
-    font-family: 'Product Sans', sans-serif; /* Setze die Schriftart für die gesamte Seite */
+    font-family: 'Product Sans', sans-serif;
     margin: 0;
     background-color: #f4f4f9;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    font-size: 1.6em; /* Etwas kleinere Schriftgröße als vorher */
-    overflow: hidden; /* Verhindert das Scrollen auf der Seite */
+    font-size: 1.6em; /* Allgemeine Textgröße */
+    overflow: hidden; /* Verhindert Scrollen */
 }
 
 h1 {
-    text-align: center; /* Zentriert den Titel */
-    font-size: 3em; /* Erhöht die Größe des Haupttitels */
-    margin-bottom: 20px; /* Abstand zwischen Titel und Card */
+    text-align: center;
+    font-size: 3em; /* Größe des Haupttitels */
+    margin-bottom: 20px; /* Abstand unterhalb des Titels */
 }
 
 #spotify-container {
@@ -23,21 +23,21 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Container soll immer den Bildschirm ausfüllen */
+    height: 100vh; /* Container passt sich der Bildschirmhöhe an */
     width: 100%;
-    overflow: hidden; /* Verhindert das Scrollen im Container */
+    overflow: hidden; /* Verhindert Scrollen innerhalb des Containers */
     text-align: center;
 }
 
 .spotify-card {
     display: flex;
-    flex-direction: column; /* Vertikale Ausrichtung */
+    flex-direction: column; /* Inhalte vertikal ausrichten */
     justify-content: center;
     align-items: center;
-    padding: 32px; /* Padding von 32px auf jeder Seite */
+    padding: 32px; /* Padding von 32px */
     background-color: #e3e3e3;
     border-radius: 32px;
-    width: 100vw; /* Breite auf 100% der Bildschirmbreite setzen */
+    width: calc(100vw - 64px); /* Gesamtbreite abzüglich Padding (links+rechts) */
     margin: 0 auto;
     gap: 16px;
     cursor: pointer;
@@ -46,8 +46,8 @@ h1 {
 }
 
 .cover {
-    width: 50vw; /* Bild nimmt 50% der Bildschirmbreite ein */
-    height: 50vw; /* Höhe wird ebenfalls auf 50% der Breite gesetzt, um das Bild quadratisch zu halten */
+    width: 25vw; /* Bild nimmt 25% der Bildschirmbreite ein */
+    height: 25vw; /* Bild bleibt quadratisch */
     background-color: black;
     background-size: cover;
     background-position: center;
@@ -59,13 +59,13 @@ h1 {
     font-weight: bold;
     margin: 0;
     color: #333;
-    font-size: 1.8em; /* Etwas kleinere Schriftgröße */
+    font-size: 1.8em; /* Textgröße des Songtitels */
 }
 
 #artist-name {
     margin: 0;
     color: #666;
-    font-size: 1.4em; /* Etwas kleinere Schriftgröße */
+    font-size: 1.4em; /* Textgröße des Künstlers */
 }
 
 #login-button {
@@ -74,7 +74,7 @@ h1 {
     border: none;
     border-radius: 32px;
     padding: 10px 20px;
-    font-size: 1.2em; /* Kleine Anpassung der Schriftgröße */
+    font-size: 1.2em; /* Schriftgröße des Buttons */
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -84,24 +84,24 @@ h1 {
 }
 
 #song-title, #artist-name {
-    font-size: 1.6em; /* Textgröße leicht kleiner */
+    font-size: 1.6em;
 }
 
 @media (max-width: 768px) {
     body {
-        font-size: 1.4em; /* Etwas kleinere Schriftgröße für mobile Geräte */
-    }
-
-    h1 {
-        font-size: 2.5em; /* Etwas kleinere Schriftgröße für den Titel auf mobilen Geräten */
-    }
-
-    #song-title, #artist-name {
         font-size: 1.4em; /* Kleinere Schriftgröße auf mobilen Geräten */
     }
 
+    h1 {
+        font-size: 2.5em; /* Kleinere Größe für den Titel */
+    }
+
+    #song-title, #artist-name {
+        font-size: 1.4em; /* Kleinere Textgröße für mobilen Viewport */
+    }
+
     .cover {
-        width: 50vw; /* Bild bleibt auf 50% der Breite */
-        height: 50vw; /* Bild bleibt quadratisch */
+        width: 25vw; /* Bild bleibt quadratisch, 25% der Breite */
+        height: 25vw;
     }
 }
