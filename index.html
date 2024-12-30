@@ -53,6 +53,10 @@
     
                     // Hintergrund mit Farbverlauf aktualisieren
                     setDynamicBackground(songCover);
+    
+                    // Überprüfen, ob der Marquee-Effekt für Titel und Künstler erforderlich ist
+                    applyMarqueeEffect(document.getElementById("song-title"));
+                    applyMarqueeEffect(document.getElementById("artist-name"));
                 } else {
                     spotifyCard.style.display = "none";
                     if (loginButton) {
@@ -119,7 +123,39 @@
             }
         }
     
+        // Funktion, um den Marquee-Effekt hinzuzufügen
+        function applyMarqueeEffect(element) {
+            const parentWidth = element.parentElement.offsetWidth;
+            const elementWidth = element.scrollWidth;
+    
+            if (elementWidth > parentWidth) {
+                element.classList.add("marquee");
+            } else {
+                element.classList.remove("marquee");
+            }
+        }
+    
+        // Marquee-Animation definieren
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @keyframes marquee {
+                0% {
+                    transform: translateX(100%);
+                }
+                100% {
+                    transform: translateX(-100%);
+                }
+            }
+    
+            .marquee {
+                animation: marquee 10s linear infinite;
+                display: inline-block;
+                position: relative;
+            }
+        `;
+        document.head.appendChild(style);
+    
         setInterval(updateNowPlaying, 1000);
-    </script>    
+    </script>     
 </body>
 </html>

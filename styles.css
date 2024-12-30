@@ -80,6 +80,7 @@ h1 {
     color: #333;
     font-size: 1.8em; /* Textgröße des Songtitels */
     word-wrap: break-word; /* Zeilenumbruch bei langen Titeln */
+    font-size: 1.6em;
 }
 
 #artist-name {
@@ -87,6 +88,7 @@ h1 {
     color: #666;
     font-size: 1.4em; /* Textgröße des Künstlers */
     word-wrap: break-word; /* Zeilenumbruch bei langen Titeln */
+    font-size: 1.6em;
 }
 
 #login-button {
@@ -102,10 +104,6 @@ h1 {
 
 #login-button:hover {
     background-color: #1aa34a;
-}
-
-#song-title, #artist-name {
-    font-size: 1.6em;
 }
 
 @media (max-width: 768px) {
@@ -125,4 +123,29 @@ h1 {
         width: 25vw; /* Bild bleibt quadratisch, 25% der Breite */
         height: 25vw;
     }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Aktiviert den Marquee-Effekt nur bei zu langem Text */
+.marquee {
+    animation: marquee 10s linear infinite;
+    display: inline-block;
+    position: relative; /* Verhindert Überlauf */
+}
+
+#song-title, #artist-name {
+    white-space: nowrap; /* Keine Zeilenumbrüche */
+    overflow: hidden; /* Verhindert Überlauf */
+    text-overflow: ellipsis; /* Zeigt "..." bei statischem Text an */
+    display: block;
+    animation: none; /* Standardmäßig keine Animation */
+    max-width: 100%; /* Passt die Breite an */
 }
