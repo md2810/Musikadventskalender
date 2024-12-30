@@ -37,7 +37,7 @@ h1 {
     padding: 32px; /* Padding von 32px */
     background-color: rgba(255, 255, 255, 0.6);;
     border-radius: 32px;
-    width: auto; /* Gesamtbreite abzüglich Padding (links+rechts) */
+    width: calc(25vw + 64px);
     margin: 0 auto;
     gap: 16px;
     cursor: pointer;
@@ -79,12 +79,14 @@ h1 {
     margin: 0;
     color: #333;
     font-size: 1.8em; /* Textgröße des Songtitels */
+    word-wrap: break-word; /* Zeilenumbruch bei langen Titeln */
 }
 
 #artist-name {
     margin: 0;
     color: #666;
     font-size: 1.4em; /* Textgröße des Künstlers */
+    word-wrap: break-word; /* Zeilenumbruch bei langen Titeln */
 }
 
 #login-button {
