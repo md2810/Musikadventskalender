@@ -33,12 +33,14 @@ body {
 }
 
 .cover {
-    width: 50%; /* Bildgröße erhöhen */
+    width: 100%; /* Bild auf 50% der Breite */
+    height: 0;
+    padding-bottom: 100%; /* Höhe auf gleiche Größe wie Breite setzen, um es quadratisch zu machen */
     background-color: black;
     background-size: cover;
     background-position: center;
     border-radius: 16px;
-    margin-bottom: 16px; /* Abstand zum Text */
+    margin-bottom: 16px;
 }
 
 #song-title {
