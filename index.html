@@ -20,17 +20,23 @@
             </div>
         </div>
         <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
+        <div class="notplaying-card" style="display: none;">
+            <p>Gleich geht es los...</p>
+        </div>
+        
     </div>
 
     <script>
         const spotifyContainer = document.getElementById("spotify-container");
         const spotifyCard = document.getElementById("now-playing");
+        const noSongCard = document.getElementById("no-song-card");
         const loginButton = document.getElementById("login-button");
     
         async function updateNowPlaying() {
             const response = await fetch("/now-playing");
             if (response.status === 401) {
                 spotifyCard.style.display = "none";
+                noSongCard.style.display = "none";
                 if (loginButton) {
                     loginButton.style.display = "block";
                 }
@@ -40,7 +46,9 @@
             if (response.ok) {
                 const data = await response.json();
                 if (data && data.is_playing) {
+                    // Song wird abgespielt, zeige die Spotify-Karte
                     spotifyCard.style.display = "flex";
+                    noSongCard.style.display = "none"; // Verstecke die "Gleich geht es los..."-Karte
                     if (loginButton) {
                         loginButton.style.display = "none";
                     }
@@ -53,18 +61,17 @@
     
                     // Hintergrund mit Farbverlauf aktualisieren
                     setDynamicBackground(songCover);
-    
-                    // Überprüfen, ob der Marquee-Effekt für Titel und Künstler erforderlich ist
-                    applyMarqueeEffect(document.getElementById("song-title"));
-                    applyMarqueeEffect(document.getElementById("artist-name"));
                 } else {
+                    // Kein Song wird abgespielt, zeige die "Gleich geht es los..."-Karte
                     spotifyCard.style.display = "none";
+                    noSongCard.style.display = "flex"; // Zeige die "Gleich geht es los..."-Karte
                     if (loginButton) {
                         loginButton.style.display = "none";
                     }
                 }
             } else {
                 spotifyCard.style.display = "none";
+                noSongCard.style.display = "none";
                 if (loginButton) {
                     loginButton.style.display = "block";
                 }
@@ -122,8 +129,8 @@
                 console.error("Fehler beim Generieren des Hintergrunds:", error);
             }
         }
+    
         setInterval(updateNowPlaying, 1000);
     </script>
-          
 </body>
 </html>

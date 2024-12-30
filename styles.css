@@ -64,6 +64,25 @@ h1 {
     backdrop-filter: blur(10px); /* Acryl-Effekt durch Weichzeichnung */
 }
 
+.notplaying-card {
+    display: flex;
+    flex-direction: column; /* Inhalte vertikal ausrichten */
+    justify-content: center;
+    align-items: center;
+    padding: 32px; /* Padding von 32px */
+    border-radius: 32px;
+    width: 25vw; /* Gesamtbreite abzüglich Padding (links+rechts) */
+    margin: 0 auto;
+    gap: 16px;
+    cursor: pointer;
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.6); /* Halbtransparenter Hintergrund */
+    backdrop-filter: blur(10px); /* Acryl-Effekt durch Weichzeichnung */
+}
+
+
 .cover {
     width: 25vw; /* Bild nimmt 25% der Bildschirmbreite ein */
     height: 25vw; /* Bild bleibt quadratisch */
