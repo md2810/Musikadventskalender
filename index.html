@@ -128,6 +128,7 @@
             const parentWidth = element.parentElement.offsetWidth;
             const elementWidth = element.scrollWidth;
     
+            // Wenn der Text zu lang ist, um in die Spotify-Card zu passen, den Marquee-Effekt hinzufügen
             if (elementWidth > parentWidth) {
                 element.classList.add("marquee");
             } else {
@@ -136,6 +137,7 @@
         }
     
         setInterval(updateNowPlaying, 1000);
-    </script>       
+    </script>
+          
 </body>
 </html>
