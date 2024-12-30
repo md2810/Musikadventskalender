@@ -1,10 +1,14 @@
+/* Einbinden der Schriftart Product Sans */
+@import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Product Sans', sans-serif; /* Setze die Schriftart für die gesamte Seite */
     margin: 0;
     background-color: #f4f4f9;
     display: flex;
     flex-direction: column;
     padding: 20px;
+    font-size: 2em; /* Verdoppele die Schriftgröße */
 }
 
 #spotify-container {
@@ -29,11 +33,11 @@ body {
     gap: 16px;
     cursor: pointer;
     position: relative;
-    text-align: center; /* Text zentrieren */
+    text-align: center;
 }
 
 .cover {
-    width: 100%; /* Bild auf 50% der Breite */
+    width: 100%; /* Bild auf 100% der Breite der Karte */
     height: 0;
     padding-bottom: 100%; /* Höhe auf gleiche Größe wie Breite setzen, um es quadratisch zu machen */
     background-color: black;
@@ -69,14 +73,37 @@ body {
     background-color: #1aa34a;
 }
 
+#song-title, #artist-name {
+    font-size: 2em; /* Verdoppele die Schriftgröße für Titel und Künstler */
+}
+
+h1 {
+    text-align: center; /* Zentriert den Titel */
+    font-size: 3em; /* Erhöht die Größe des Haupttitels */
+}
+
 @media (max-width: 768px) {
     .spotify-card {
         width: 100%;
-        max-width: 400px; /* Kartenbreite für kleinere Bildschirme */
+        max-width: 100%; /* Auch hier die Breite auf 100% setzen */
     }
 
     .cover {
-        width: 200px; /* Bildgröße anpassen */
-        height: 200px;
+        width: 100%; /* Bild bleibt 100% der Breite */
+        height: 0;
+        padding-bottom: 100%; /* Bild bleibt quadratisch */
+    }
+
+    /* Schriftgröße für mobile Geräte anpassen */
+    body {
+        font-size: 1.5em; /* Etwas kleinere Schriftgröße für mobile Geräte */
+    }
+
+    h1 {
+        font-size: 2.5em; /* Etwas kleinere Schriftgröße für den Titel auf mobilen Geräten */
+    }
+
+    #song-title, #artist-name {
+        font-size: 1.5em; /* Kleinere Schriftgröße auf mobilen Geräten */
     }
 }
