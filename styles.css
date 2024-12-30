@@ -16,6 +16,10 @@ body {
     min-height: 100vh;
 }
 
+.cards {
+    vertical-align: middle;
+}
+
 h1 {
     font-size: 2em; /* Kleinere Schriftgröße für den Titel */
     margin: 0; /* Kein zusätzlicher Abstand */

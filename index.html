@@ -7,25 +7,25 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="title-card">
-        <h1>Musikadventskalender</h1>
-    </div>
+    <div class="cards">
+        <div class="title-card">
+            <h1>Musikadventskalender</h1>
+        </div>
 
-    <div id="spotify-container">
-        <div id="now-playing" class="spotify-card">
-            <div id="song-cover" class="cover"></div>
-            <div>
-                <p id="song-title">Kein Song</p>
-                <p id="artist-name">Keine Wiedergabe</p>
+        <div id="spotify-container">
+            <div id="now-playing" class="spotify-card">
+                <div id="song-cover" class="cover"></div>
+                <div>
+                    <p id="song-title">Kein Song</p>
+                    <p id="artist-name">Keine Wiedergabe</p>
+                </div>
+            </div>
+            <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
+            <div class="notplaying-card" id="no-song-card" style="display: none;">
+                <p>Gleich geht es los...</p>
             </div>
         </div>
-        <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
-        <div class="notplaying-card" id="no-song-card" style="display: none;">
-            <p>Gleich geht es los...</p>
-        </div>
-        
     </div>
-
     <script>
         const spotifyContainer = document.getElementById("spotify-container");
         const spotifyCard = document.getElementById("now-playing");
