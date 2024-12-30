@@ -10,6 +10,7 @@ body {
     padding: 20px;
     font-size: 1.6em; /* Allgemeine Textgröße */
     overflow: hidden; /* Verhindert Scrollen */
+    transition: background 1s ease;
 }
 
 h1 {
@@ -142,4 +143,13 @@ h1 {
         width: 25vw; /* Bild bleibt quadratisch, 25% der Breite */
         height: 25vw;
     }
+}
+
+.spotify-card, .title-card, #no-song-card {
+    transition: opacity 1s ease-in-out;
+    opacity: 0; /* Initial unsichtbar */
+}
+
+.spotify-card.show, .title-card.show, #no-song-card.show {
+    opacity: 1; /* Wenn angezeigt, dann sichtbar */
 }
