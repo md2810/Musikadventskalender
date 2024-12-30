@@ -124,23 +124,3 @@ h1 {
         height: 25vw;
     }
 }
-
-/* Marquee-Animation für den Text */
-@keyframes marquee {
-    0% {
-        transform: translateX(100%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-/* Marquee-Effekt auf Titeln und Künstlernamen anwenden, wenn notwendig */
-.marquee {
-    animation: marquee 10s linear infinite;
-    display: inline-block;
-    white-space: nowrap; /* Verhindert Zeilenumbruch */
-    overflow: hidden; /* Verhindert, dass der Text aus der Karte hinausragt */
-    position: relative;
-    padding-right: 100%; /* Gilt als Puffer für den Effekt */
-}

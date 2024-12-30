@@ -122,20 +122,6 @@
                 console.error("Fehler beim Generieren des Hintergrunds:", error);
             }
         }
-    
-        // Funktion, um den Marquee-Effekt hinzuzufügen
-        function applyMarqueeEffect(element) {
-            const parentWidth = element.parentElement.offsetWidth;
-            const elementWidth = element.scrollWidth;
-    
-            // Wenn der Text zu lang ist, um in die Spotify-Card zu passen, den Marquee-Effekt hinzufügen
-            if (elementWidth > parentWidth) {
-                element.classList.add("marquee");
-            } else {
-                element.classList.remove("marquee");
-            }
-        }
-    
         setInterval(updateNowPlaying, 1000);
     </script>
           
