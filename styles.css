@@ -17,7 +17,12 @@ body {
 }
 
 .cards {
-    vertical-align: middle;
+    width: 100%; /* Passe die Breite an */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Vertikale Zentrierung */
+    gap: 20px; /* Abstand zwischen den Karten */
 }
 
 h1 {
