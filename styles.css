@@ -4,17 +4,17 @@
 body {
     font-family: 'Product Sans', sans-serif;
     margin: 0;
+    padding: 0; /* Kein Padding oder Margin */
     background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Vertikale Zentrierung */
-    padding: 20px;
-    font-size: 1.6em;
+    display: flex; /* Flexbox aktivieren */
+    flex-direction: column; /* Elemente vertikal anordnen */
+    align-items: center; /* Horizontal zentrieren */
+    justify-content: center; /* Vertikal zentrieren */
+    min-height: 100vh; /* Gesamte Höhe des Viewports nutzen */
     overflow: hidden;
     transition: background 1s ease;
-    min-height: 100vh; /* Höhe des Viewports */
 }
+
 
 .cards {
     width: 100%; /* Passe die Breite an */
@@ -164,4 +164,10 @@ h1 {
 
 .spotify-card.show, .title-card.show, #no-song-card.show {
     opacity: 1; /* Wenn angezeigt, dann sichtbar */
+}
+
+.title-card, .spotify-card {
+    margin: 0; /* Verhindere zusätzlichen Abstand */
+    position: static; /* Kein absolutes Positionieren */
+    flex-shrink: 0; /* Verhindere, dass die Elemente schrumpfen */
 }
