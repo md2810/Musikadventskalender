@@ -23,6 +23,7 @@ body {
     align-items: center;
     justify-content: center; /* Vertikale Zentrierung */
     gap: 20px; /* Abstand zwischen den Karten */
+    margin-top: 20vh;
 }
 
 h1 {
