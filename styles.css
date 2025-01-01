@@ -1,36 +1,28 @@
-/* Einbinden der Schriftart Product Sans */
 @import url('https://fonts.googleapis.com/css2?family=Product+Sans&display=swap');
 
 body {
     font-family: 'Product Sans', sans-serif;
     margin: 0;
-    padding: 0; /* Kein Padding oder Margin */
     background-color: #ffffff;
-    display: flex; /* Flexbox aktivieren */
-    flex-direction: column; /* Elemente vertikal anordnen */
-    align-items: center; /* Horizontal zentrieren */
-    justify-content: center; /* Vertikal zentrieren */
-    min-height: 100vh; /* Gesamte Höhe des Viewports nutzen */
-    overflow: hidden;
-    transition: background 1s ease;
-}
-
-
-.cards {
-    width: 100%; /* Passe die Breite an */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Vertikale Zentrierung */
-    gap: 20px; /* Abstand zwischen den Karten */
+    justify-content: center;
+    min-height: 100vh;
+    transition: background 1s ease;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 20vh;
 }
 
 h1 {
-    font-size: 2em; /* Kleinere Schriftgröße für den Titel */
-    margin: 0; /* Kein zusätzlicher Abstand */
+    font-size: 2em;
     text-align: center;
-    color: #333; /* Standardfarbe */
+    color: #333;
 }
 
 #spotify-container {
@@ -38,67 +30,25 @@ h1 {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    overflow: hidden; /* Verhindert Scrollen innerhalb des Containers */
     text-align: center;
 }
 
-.spotify-card {
+.spotify-card, .notplaying-card, .title-card {
     display: flex;
-    flex-direction: column; /* Inhalte vertikal ausrichten */
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 32px; /* Padding von 32px */
-    background-color: rgba(255, 255, 255, 0.6);;
+    padding: 32px;
+    background-color: rgba(255, 255, 255, 0.6);
     border-radius: 32px;
     width: 25vw;
-    margin: 0 auto;
-    gap: 16px;
-    cursor: pointer;
-    position: relative;
-    text-align: center;
-    backdrop-filter: blur(10px); /* Acryl-Effekt durch Weichzeichnung */
-}
-
-.title-card {
-    display: flex;
-    flex-direction: column; /* Inhalte vertikal ausrichten */
-    justify-content: center;
-    align-items: center;
-    padding: 32px; /* Padding von 32px */
-    border-radius: 32px;
-    width: 25vw; /* Gesamtbreite abzüglich Padding (links+rechts) */
-    margin: 0 auto;
-    gap: 16px;
-    cursor: pointer;
-    position: relative;
-    text-align: center;
     margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.6); /* Halbtransparenter Hintergrund */
-    backdrop-filter: blur(10px); /* Acryl-Effekt durch Weichzeichnung */
-}
-
-.notplaying-card {
-    display: flex;
-    flex-direction: column; /* Inhalte vertikal ausrichten */
-    justify-content: center;
-    align-items: center;
-    padding: 32px; /* Padding von 32px */
-    border-radius: 32px;
-    width: 25vw; /* Gesamtbreite abzüglich Padding (links+rechts) */
-    margin: 0 auto;
-    gap: 16px;
-    cursor: pointer;
-    position: relative;
     text-align: center;
-    margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.6); /* Halbtransparenter Hintergrund */
-    backdrop-filter: blur(10px); /* Acryl-Effekt durch Weichzeichnung */
+    backdrop-filter: blur(10px);
 }
-
 
 .cover {
-    width: 25vw; /* Bild nimmt 25% der Bildschirmbreite ein */
-    height: 25vw; /* Bild bleibt quadratisch */
+    width: 25vw;
+    height: 25vw;
     background-color: black;
     background-size: cover;
     background-position: center;
@@ -108,19 +58,11 @@ h1 {
 
 #song-title {
     font-weight: bold;
-    margin: 0;
     color: #333;
-    font-size: 1.8em; /* Textgröße des Songtitels */
-    word-wrap: break-word; /* Zeilenumbruch bei langen Titeln */
-    font-size: 1.6em;
 }
 
 #artist-name {
-    margin: 0;
     color: #666;
-    font-size: 1.4em; /* Textgröße des Künstlers */
-    word-wrap: break-word; /* Zeilenumbruch bei langen Titeln */
-    font-size: 1.6em;
 }
 
 #login-button {
@@ -129,45 +71,9 @@ h1 {
     border: none;
     border-radius: 32px;
     padding: 10px 20px;
-    font-size: 1.2em; /* Schriftgröße des Buttons */
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 #login-button:hover {
     background-color: #1aa34a;
-}
-
-@media (max-width: 768px) {
-    body {
-        font-size: 1.4em; /* Kleinere Schriftgröße auf mobilen Geräten */
-    }
-
-    h1 {
-        font-size: 2.5em; /* Kleinere Größe für den Titel */
-    }
-
-    #song-title, #artist-name {
-        font-size: 1.4em; /* Kleinere Textgröße für mobilen Viewport */
-    }
-
-    .cover {
-        width: 25vw; /* Bild bleibt quadratisch, 25% der Breite */
-        height: 25vw;
-    }
-}
-
-.spotify-card, #no-song-card {
-    transition: opacity 1s ease-in-out;
-    opacity: 0; /* Initial unsichtbar */
-}
-
-.spotify-card.show, .title-card.show, #no-song-card.show {
-    opacity: 1; /* Wenn angezeigt, dann sichtbar */
-}
-
-.title-card, .spotify-card {
-    margin: 0; /* Verhindere zusätzlichen Abstand */
-    position: static; /* Kein absolutes Positionieren */
-    flex-shrink: 0; /* Verhindere, dass die Elemente schrumpfen */
 }
