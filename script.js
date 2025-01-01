@@ -54,48 +54,66 @@ const spotifyContainer = document.getElementById("spotify-container");
                 const img = new Image();
                 img.crossOrigin = "Anonymous";
                 img.src = imageUrl;
-    
+        
                 img.onload = () => {
                     const canvas = document.createElement("canvas");
                     const context = canvas.getContext("2d");
                     canvas.width = img.width;
                     canvas.height = img.height;
-    
+        
                     context.drawImage(img, 0, 0, canvas.width, canvas.height);
-    
+        
                     const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-    
-                    let r1 = 0, g1 = 0, b1 = 0, r2 = 0, g2 = 0, b2 = 0;
+        
+                    let r1 = 0, g1 = 0, b1 = 0;
+                    let r2 = 0, g2 = 0, b2 = 0;
+                    let r3 = 0, g3 = 0, b3 = 0;
+        
                     const totalPixels = imageData.length / 4;
-    
-                    for (let i = 0; i < totalPixels / 2; i++) {
+                    const sectionPixels = totalPixels / 3;
+        
+                    // Erste Farbe (oberes Drittel)
+                    for (let i = 0; i < sectionPixels; i++) {
                         r1 += imageData[i * 4];
                         g1 += imageData[i * 4 + 1];
                         b1 += imageData[i * 4 + 2];
                     }
-    
-                    for (let i = totalPixels / 2; i < totalPixels; i++) {
+        
+                    // Zweite Farbe (mittleres Drittel)
+                    for (let i = sectionPixels; i < sectionPixels * 2; i++) {
                         r2 += imageData[i * 4];
                         g2 += imageData[i * 4 + 1];
                         b2 += imageData[i * 4 + 2];
                     }
-    
-                    r1 = Math.floor(r1 / (totalPixels / 2));
-                    g1 = Math.floor(g1 / (totalPixels / 2));
-                    b1 = Math.floor(b1 / (totalPixels / 2));
-                    r2 = Math.floor(r2 / (totalPixels / 2));
-                    g2 = Math.floor(g2 / (totalPixels / 2));
-                    b2 = Math.floor(b2 / (totalPixels / 2));
-    
-                    const gradient = `linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}))`;
-    
+        
+                    // Dritte Farbe (unteres Drittel)
+                    for (let i = sectionPixels * 2; i < totalPixels; i++) {
+                        r3 += imageData[i * 4];
+                        g3 += imageData[i * 4 + 1];
+                        b3 += imageData[i * 4 + 2];
+                    }
+        
+                    r1 = Math.floor(r1 / sectionPixels);
+                    g1 = Math.floor(g1 / sectionPixels);
+                    b1 = Math.floor(b1 / sectionPixels);
+        
+                    r2 = Math.floor(r2 / sectionPixels);
+                    g2 = Math.floor(g2 / sectionPixels);
+                    b2 = Math.floor(b2 / sectionPixels);
+        
+                    r3 = Math.floor(r3 / sectionPixels);
+                    g3 = Math.floor(g3 / sectionPixels);
+                    b3 = Math.floor(b3 / sectionPixels);
+        
+                    const gradient = `linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}), rgb(${r3},${g3},${b3}))`;
+        
                     document.body.style.transition = "background 1s ease";
                     document.body.style.background = gradient;
                 };
             } catch (error) {
                 console.error("Fehler beim Generieren des Hintergrunds:", error);
             }
-        }
+        }        
     
         function adjustFontSizeAndPadding() {
             const titleCard = document.querySelector(".title-card");
