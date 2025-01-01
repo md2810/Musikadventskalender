@@ -120,6 +120,10 @@ h1 {
  background-color: #1aa34a;
 }
 
-.spotify-card.show, .title-card.show, #no-song-card.show {
+.spotify-card.show, .title-card.show, .not-playing-card.show {
  opacity: 1;
+}
+
+.not-playing-card {
+ opacity: 0;
 }
