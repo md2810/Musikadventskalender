@@ -7,7 +7,6 @@ const spotifyContainer = document.getElementById("spotify-container");
             const response = await fetch("/now-playing");
             if (response.status === 401) {
                 spotifyCard.classList.remove("show");
-                noSongCard.classList.remove("show");
                 if (loginButton) {
                     loginButton.style.display = "block";
                 }
