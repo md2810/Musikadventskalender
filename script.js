@@ -28,7 +28,7 @@ const spotifyContainer = document.getElementById("spotify-container");
                         .map((artist) => artist.name)
                         .join(", ");
                     const songCover = data.item.album.images[0].url;
-                    document.getElementById("song-cover").style.backgroundImage = url(${songCover});
+                    document.getElementById("song-cover").style.backgroundImage = `url(${songCover})`;
     
                     if (songCover !== currentSongCover) {
                         currentSongCover = songCover;
@@ -88,7 +88,7 @@ const spotifyContainer = document.getElementById("spotify-container");
                     g2 = Math.floor(g2 / (totalPixels / 2));
                     b2 = Math.floor(b2 / (totalPixels / 2));
     
-                    const gradient = linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}));
+                    const gradient = `linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}))`;
     
                     document.body.style.transition = "background 1s ease";
                     document.body.style.background = gradient;
@@ -104,18 +104,18 @@ const spotifyContainer = document.getElementById("spotify-container");
     
             // Padding berücksichtigen (Breite reduzieren um 64px)
             const availableWidth = titleCard.clientWidth - 64;
-            titleText.style.maxWidth = ${availableWidth}px;
+            titleText.style.maxWidth = `${availableWidth}px`;
             titleText.style.margin = "0 auto"; // Zentriert den Text
             titleText.style.wordWrap = "break-word"; // Lange Wörter umbrechen
     
             // Dynamische Schriftgrößenanpassung
-            let fontSize = 3; // Initiale Schriftgröße in em
-            titleText.style.fontSize = ${fontSize}em;
+            let fontSize = 3; // Initiale Schriftgröße in `em`
+            titleText.style.fontSize = `${fontSize}em`;
     
             // Schriftgröße reduzieren, bis der Text passt
             while ((titleText.scrollWidth > titleCard.clientWidth - 64 || titleText.scrollHeight > titleCard.clientHeight) && fontSize > 0.5) {
                 fontSize -= 0.1;
-                titleText.style.fontSize = ${fontSize}em;
+                titleText.style.fontSize = `${fontSize}em`;
             }
         }
     
