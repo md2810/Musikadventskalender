@@ -28,7 +28,7 @@ body {
 
 h1 {
     font-size: 2em; /* Kleinere Schriftgröße für den Titel */
-    margin: 0; /* Kein zusätzlicher Abstand */
+    margin: 32px; /* Kein zusätzlicher Abstand */
     text-align: center;
     color: #333; /* Standardfarbe */
 }
