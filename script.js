@@ -70,29 +70,33 @@ const spotifyContainer = document.getElementById("spotify-container");
                     let r3 = 0, g3 = 0, b3 = 0;
         
                     const totalPixels = imageData.length / 4;
-                    const sectionPixels = totalPixels / 3;
+                    const sectionPixels = Math.floor(totalPixels / 3); // Aufteilung in Drittel
         
                     // Erste Farbe (oberes Drittel)
                     for (let i = 0; i < sectionPixels; i++) {
-                        r1 += imageData[i * 4];
-                        g1 += imageData[i * 4 + 1];
-                        b1 += imageData[i * 4 + 2];
+                        const offset = i * 4;
+                        r1 += imageData[offset];
+                        g1 += imageData[offset + 1];
+                        b1 += imageData[offset + 2];
                     }
         
                     // Zweite Farbe (mittleres Drittel)
                     for (let i = sectionPixels; i < sectionPixels * 2; i++) {
-                        r2 += imageData[i * 4];
-                        g2 += imageData[i * 4 + 1];
-                        b2 += imageData[i * 4 + 2];
+                        const offset = i * 4;
+                        r2 += imageData[offset];
+                        g2 += imageData[offset + 1];
+                        b2 += imageData[offset + 2];
                     }
         
                     // Dritte Farbe (unteres Drittel)
                     for (let i = sectionPixels * 2; i < totalPixels; i++) {
-                        r3 += imageData[i * 4];
-                        g3 += imageData[i * 4 + 1];
-                        b3 += imageData[i * 4 + 2];
+                        const offset = i * 4;
+                        r3 += imageData[offset];
+                        g3 += imageData[offset + 1];
+                        b3 += imageData[offset + 2];
                     }
         
+                    // Durchschnittswerte berechnen
                     r1 = Math.floor(r1 / sectionPixels);
                     g1 = Math.floor(g1 / sectionPixels);
                     b1 = Math.floor(b1 / sectionPixels);
@@ -101,10 +105,11 @@ const spotifyContainer = document.getElementById("spotify-container");
                     g2 = Math.floor(g2 / sectionPixels);
                     b2 = Math.floor(b2 / sectionPixels);
         
-                    r3 = Math.floor(r3 / sectionPixels);
-                    g3 = Math.floor(g3 / sectionPixels);
-                    b3 = Math.floor(b3 / sectionPixels);
+                    r3 = Math.floor(r3 / (totalPixels - sectionPixels * 2));
+                    g3 = Math.floor(g3 / (totalPixels - sectionPixels * 2));
+                    b3 = Math.floor(b3 / (totalPixels - sectionPixels * 2));
         
+                    // CSS-Gradient erstellen
                     const gradient = `linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}), rgb(${r3},${g3},${b3}))`;
         
                     document.body.style.transition = "background 1s ease";
@@ -113,7 +118,7 @@ const spotifyContainer = document.getElementById("spotify-container");
             } catch (error) {
                 console.error("Fehler beim Generieren des Hintergrunds:", error);
             }
-        }        
+        }         
     
         function adjustFontSizeAndPadding() {
             const titleCard = document.querySelector(".title-card");
