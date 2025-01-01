@@ -136,7 +136,7 @@
     
             // Reduzieren, bis der Text in den Container passt
             while (titleText.scrollWidth > titleCard.clientWidth && fontSize > 0.5) {
-                fontSize -= 0.1;
+                fontSize -= 0.5;
                 titleText.style.fontSize = `${fontSize}em`;
             }
         }
