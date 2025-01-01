@@ -1,6 +1,5 @@
 const spotifyContainer = document.getElementById("spotify-container");
         const spotifyCard = document.getElementById("now-playing");
-        const noSongCard = document.getElementById("no-song-card");
         const loginButton = document.getElementById("login-button");
         let currentSongCover = "";
     
@@ -19,7 +18,6 @@ const spotifyContainer = document.getElementById("spotify-container");
                 const data = await response.json();
                 if (data && data.is_playing) {
                     spotifyCard.classList.add("show");
-                    noSongCard.classList.remove("show");
                     if (loginButton) {
                         loginButton.style.display = "none";
                     }
@@ -36,14 +34,12 @@ const spotifyContainer = document.getElementById("spotify-container");
                     }
                 } else {
                     spotifyCard.classList.remove("show");
-                    noSongCard.classList.add("show");
                     if (loginButton) {
                         loginButton.style.display = "none";
                     }
                 }
             } else {
                 spotifyCard.classList.remove("show");
-                noSongCard.classList.remove("show");
                 if (loginButton) {
                     loginButton.style.display = "block";
                 }
