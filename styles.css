@@ -4,7 +4,7 @@ body {
  font-family: 'Product Sans', sans-serif;
  margin: 0;
  padding: 0;
- background: linear-gradient(to bottom, #8B0000, #FF0000, #FF6347);
+ background: radial-gradient(circle, #8B0000, #FF0000, #FF6347);
  display: flex;
  flex-direction: column;
  align-items: center;

@@ -110,7 +110,7 @@ const spotifyContainer = document.getElementById("spotify-container");
                     b3 = Math.floor(b3 / (totalPixels - sectionPixels * 2));
         
                     // CSS-Gradient erstellen
-                    const gradient = `linear-gradient(to bottom, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}), rgb(${r3},${g3},${b3}))`;
+                    const gradient = `radial-gradient(circle, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}), rgb(${r3},${g3},${b3}))`;
         
                     document.body.style.transition = "background 1s ease";
                     document.body.style.background = gradient;
