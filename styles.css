@@ -37,7 +37,6 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh; /* Container passt sich der Bildschirmhöhe an */
     width: 100%;
     overflow: hidden; /* Verhindert Scrollen innerhalb des Containers */
     text-align: center;
