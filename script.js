@@ -140,6 +140,13 @@ const spotifyContainer = document.getElementById("spotify-container");
                 titleText.style.fontSize = `${fontSize}em`;
             }
         }
+
+        async function refreshLogin() {
+            const response = await fetch("/now-playing");
+            if (response.status === 401) {
+                window.location.href = "/login";
+            }
+        }
     
         window.addEventListener("load", () => {
             adjustFontSizeAndPadding();
