@@ -47,6 +47,8 @@ body {
  overflow: hidden;
  transition: background 1s ease;
  text-shadow: none;
+ -webkit-font-smoothing: antialiased; /* Glatte Kanten */
+ -moz-osx-font-smoothing: grayscale;  /* Für macOS */
 }
 
 .cards {
