@@ -10,9 +10,9 @@
     <title>Musikadventskalender</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="refreshLogin();">
-    <div class="cards">
-        <div class="title-card">
+<body onload="refreshLogin(); showAdIfRequested();">
+    <div class="cards" id="cards">
+        <div class="title-card" id="title-card">
             <h1>Musikadventskalender</h1>
         </div>
 
@@ -27,9 +27,17 @@
             <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
         </div>
         <div class="not-playing-card" id="not-playing">
-            <h1>Gleich geht es los...</h1>
+            <h1>Gleich geht's los...</h1>
         </div>
     </div>
+
+    <div id="ad-card" class="ad-card">
+        <video id="ad-video" class="ad-video" autoplay muted loop>
+            <source src="ad.mp4" type="video/mp4">
+        </video>
+        <p>Winterball Tickets jetzt erhältlich!</p>
+    </div>
+    <button id="ad-button"></button>
     <script src="script.js"></script>          
 </body>
 </html>

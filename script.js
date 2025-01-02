@@ -2,6 +2,8 @@ const spotifyContainer = document.getElementById("spotify-container");
 const spotifyCard = document.getElementById("now-playing");
 const loginButton = document.getElementById("login-button");
 const notPlaying = document.getElementById("not-playing");
+const cards = document.getElementById("cards");
+const adCard = document.getElementById("ad-card");
 let currentSongCover = "";
 
 async function updateNowPlaying() {
@@ -147,6 +149,66 @@ async function refreshLogin() {
         window.location.href = "/login";
     }
 }
+
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+function showAdIfRequested() {
+    if (getQueryParam('showAd') === 'true') {
+        cards.classList.add("moved");
+        notPlaying.classList.add("moved");
+        adCard.classList.add("show");
+    } else {
+        cards.classList.remove("moved");
+        notPlaying.classList.remove("moved");
+        adCard.classList.remove("show");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const adButton = document.getElementById("ad-button");
+    let clickCount = 0;
+    const resetDelay = 1000; // Zeit in Millisekunden, nach der der Klickzähler zurückgesetzt wird
+
+    if (adButton) {
+        console.log("adButton gefunden!");
+        
+        adButton.addEventListener("click", () => {
+            clickCount++;
+            console.log(`Button wurde ${clickCount} Mal geklickt`);
+
+            if (clickCount === 3) {
+                console.log("Dreimal geklickt, Weiterleitung wird ausgeführt...");
+                
+                clickCount = 0; // Zähler zurücksetzen
+
+                // Aktuellen Wert von ?showAd abrufen
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentShowAd = urlParams.get("showAd");
+                console.log(`Aktueller Wert von showAd: ${currentShowAd}`);
+
+                // Ziel-URL berechnen
+                const newShowAd = currentShowAd === "true" ? "false" : "true"; // Gegenteil des aktuellen Werts
+                console.log(`Ziel-URL wird geändert zu: ?showAd=${newShowAd}`);
+                
+                const newUrl = `${window.location.pathname}?showAd=${newShowAd}`;
+
+                // Weiterleitung
+                window.location.href = newUrl;
+            }
+
+            // Klick-Zähler nach einer gewissen Zeit zurücksetzen
+            setTimeout(() => {
+                clickCount = 0;
+                console.log("Klick-Zähler nach Timeout zurückgesetzt");
+            }, resetDelay);
+        });
+    } else {
+        console.error("Button mit ID 'ad-button' wurde nicht gefunden!");
+    }
+});
 
 window.addEventListener("load", () => {
     adjustFontSizeAndPadding();
