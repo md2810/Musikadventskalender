@@ -328,12 +328,20 @@ p {
   font-weight: bold;
 }
 
+.ad-video {
+  overflow: hidden;
+  border-radius: 16px;
+}
+
 video {
   width: 100%;
   height: 100%;
-  border-radius: 16px;
+  display: block;
   margin: 0;
-  overflow-clip-margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
 }
 
 .ad-card {
