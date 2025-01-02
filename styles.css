@@ -328,10 +328,12 @@ p {
   font-weight: bold;
 }
 
-.ad-video {
+video {
   width: 100%;
+  height: 100%;
   border-radius: 16px;
   margin: 0;
+  overflow-clip-margin: 0;
 }
 
 .ad-card {
