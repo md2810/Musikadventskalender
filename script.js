@@ -168,51 +168,26 @@ function showAdIfRequested() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const adButton = document.getElementById("hidden-button");
-    let clickCount = 0;
-    const resetDelay = 1000; // Zeit in Millisekunden, nach der der Klickzähler zurückgesetzt wird
+    // Eventlistener für Tastatureingaben
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "L" || event.key === "l") {
+            console.log("Taste 'L' gedrückt, Weiterleitung nach /logout...");
+            window.location.href = "/logout";
+        }
 
-    if (adButton) {
-        console.log("adButton gefunden!");
+        if (event.key === "A" || event.key === "a") {
+            console.log("Taste 'A' gedrückt, Ausführung der Aktion...");
 
-        adButton.addEventListener("click", () => {
-            clickCount++;
-            console.log(`Button wurde ${clickCount} Mal geklickt`);
+            // Aktuellen Wert von ?showAd abrufen
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentShowAd = urlParams.get("showAd");
+            const newShowAd = currentShowAd === "true" ? "false" : "true";
 
-            if (clickCount === 3) {
-                console.log("Dreimal geklickt, Weiterleitung wird ausgeführt...");
-
-                clickCount = 0; // Zähler zurücksetzen
-
-                // Aktuellen Wert von ?showAd abrufen
-                const urlParams = new URLSearchParams(window.location.search);
-                const currentShowAd = urlParams.get("showAd");
-                console.log(`Aktueller Wert von showAd: ${currentShowAd}`);
-
-                // Ziel-URL berechnen
-                const newShowAd = currentShowAd === "true" ? "false" : "true"; // Gegenteil des aktuellen Werts
-                console.log(`Ziel-URL wird geändert zu: ?showAd=${newShowAd}`);
-
-                const newUrl = `${window.location.pathname}?showAd=${newShowAd}`;
-
-                // Weiterleitung
-                window.location.href = newUrl;
-            }
-
-            if (clickCount === 5) {
-                console.log("Fünfmal geklickt, Weiterleitung nach /login...");
-                window.location.href = "/login";
-            }
-
-            // Klick-Zähler nach einer gewissen Zeit zurücksetzen
-            setTimeout(() => {
-                clickCount = 0;
-                console.log("Klick-Zähler nach Timeout zurückgesetzt");
-            }, resetDelay);
-        });
-    } else {
-        console.error("Button mit ID 'ad-button' wurde nicht gefunden!");
-    }
+            const newUrl = `${window.location.pathname}?showAd=${newShowAd}`;
+            console.log(`Weiterleitung zur URL: ${newUrl}`);
+            window.location.href = newUrl;
+        }
+    });
 });
 
 window.addEventListener("load", () => {

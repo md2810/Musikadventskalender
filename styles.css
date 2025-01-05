@@ -311,14 +311,6 @@ h1 {
   height: auto;
 }
 
-#hidden-button {
-  background-color: #ffffff00;
-  border-color: #ffffff00;
-  height: 8vh;
-  width: 8vw;
-  cursor: pointer;
-}
-
 p {
   font-size: 3em;
   margin-block-start: 32px;
