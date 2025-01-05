@@ -168,20 +168,20 @@ function showAdIfRequested() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const adButton = document.getElementById("ad-button");
+    const adButton = document.getElementById("hidden-button");
     let clickCount = 0;
     const resetDelay = 1000; // Zeit in Millisekunden, nach der der Klickzähler zurückgesetzt wird
 
     if (adButton) {
         console.log("adButton gefunden!");
-        
+
         adButton.addEventListener("click", () => {
             clickCount++;
             console.log(`Button wurde ${clickCount} Mal geklickt`);
 
             if (clickCount === 3) {
                 console.log("Dreimal geklickt, Weiterleitung wird ausgeführt...");
-                
+
                 clickCount = 0; // Zähler zurücksetzen
 
                 // Aktuellen Wert von ?showAd abrufen
@@ -192,11 +192,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Ziel-URL berechnen
                 const newShowAd = currentShowAd === "true" ? "false" : "true"; // Gegenteil des aktuellen Werts
                 console.log(`Ziel-URL wird geändert zu: ?showAd=${newShowAd}`);
-                
+
                 const newUrl = `${window.location.pathname}?showAd=${newShowAd}`;
 
                 // Weiterleitung
                 window.location.href = newUrl;
+            }
+
+            if (clickCount === 5) {
+                console.log("Fünfmal geklickt, Weiterleitung nach /login...");
+                window.location.href = "/login";
             }
 
             // Klick-Zähler nach einer gewissen Zeit zurücksetzen
