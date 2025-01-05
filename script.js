@@ -114,7 +114,7 @@ async function setDynamicBackground(imageUrl) {
             // CSS-Gradient erstellen
             const gradient = `radial-gradient(circle at top, rgb(${r1},${g1},${b1}) 1%, transparent),
                                 radial-gradient(circle at center, rgb(${r2},${g2},${b2}) 1%, transparent),
-                                radial-gradient(circle at bottom, rgb(${r3},${g3},${b3})) 1%, transparent;`;
+                                radial-gradient(circle at bottom, rgb(${r3},${g3},${b3})) 1%, transparent)`;
             const staticColor = `rgb(${r3},${g3},${b3})`;
 
             document.body.style.transition = "background 1s ease";
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("load", () => {
     adjustFontSizeAndPadding();
     setInterval(updateNowPlaying, 1000);
-    setInterval(randomBackgroundMovement, 1000);
+    setInterval(randomBackgroundMovement, 5000);
 });
 
 window.addEventListener("resize", adjustFontSizeAndPadding);
