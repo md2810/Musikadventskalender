@@ -117,7 +117,6 @@ async function setDynamicBackground(imageUrl) {
                                 radial-gradient(circle at bottom, rgb(${r3},${g3},${b3})) 1%, transparent)`;
             const staticColor = `rgb(${r3},${g3},${b3})`;
 
-            document.body.style.transition = "background 1s ease";
             document.body.style.background = gradient;
             document.body.style.backgroundColor = staticColor;
         };
