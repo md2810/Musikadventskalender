@@ -311,12 +311,20 @@ h1 {
   height: auto;
 }
 
-#ad-button {
+#hidden-buttons button {
   background-color: #ffffff00;
   border-color: #ffffff00;
-  height: 4vh;
-  width: 4vw;
+  height: 8vh;
+  width: 8vw;
   cursor: pointer;
+}
+
+#ad-button {
+  align-self:first baseline;
+}
+
+#login-btn {
+  align-self:first baseline;
 }
 
 p {
