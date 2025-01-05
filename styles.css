@@ -195,7 +195,12 @@ body {
  font-family: 'Product Sans', sans-serif;
  margin: 0;
  padding: 0;
- background: radial-gradient(circle, #8B0000, #FF0000, #FF6347);
+ background: 
+ radial-gradient(circle at top, #8B0000 1%, transparent),
+ radial-gradient(circle at center, #FF0000 1%, transparent),
+ radial-gradient(circle at bottom, #FF6347 1%, transparent);
+ background-size: 150% 150%;
+ animation: moveBackground infinite alternate ease-in-out;
  display: flex;
  flex-direction: column;
  align-items: center;
@@ -207,6 +212,24 @@ body {
  -webkit-font-smoothing: antialiased; /* Glatte Kanten */
  -moz-osx-font-smoothing: grayscale;  /* Für macOS */
  user-select: none;
+}
+
+@keyframes moveBackground {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 50% 25%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 25% 75%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
 }
 
 .cards {
