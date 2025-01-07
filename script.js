@@ -112,9 +112,7 @@ async function setDynamicBackground(imageUrl) {
             b3 = Math.floor(b3 / (totalPixels - sectionPixels * 2));
 
             // CSS-Gradient erstellen
-            const gradient = `radial-gradient(circle at top, rgb(${r1},${g1},${b1}) 1%, transparent),
-                                radial-gradient(circle at center, rgb(${r2},${g2},${b2}) 1%, transparent),
-                                radial-gradient(circle at bottom, rgb(${r3},${g3},${b3})) 1%, transparent);`;
+            const gradient = `radial-gradient(circle, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}), rgb(${r3},${g3},${b3}))`;
             const staticColor = `rgb(${r3},${g3},${b3})`;
 
             document.body.style.background = gradient;
