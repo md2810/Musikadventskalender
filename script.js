@@ -114,8 +114,7 @@ async function setDynamicBackground(imageUrl) {
             // CSS-Gradient erstellen
             const gradient = `radial-gradient(ellipse at top, rgb(${r1},${g1},${b1})),
                                 radial-gradient(ellipse at right, rgb(${r2},${g2},${b2}),
-                                radial-gradient(ellipse at left, rgb(${r3},${g3},${b3});`;
-            const staticColor = `rgb(${r3},${g3},${b3})`;
+                                radial-gradient(ellipse at left, rgb(${r3},${g3},${b3})`;
 
             document.body.style.background = gradient;
         };
