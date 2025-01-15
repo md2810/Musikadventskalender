@@ -51,12 +51,12 @@ async function updateNowPlaying() {
     }
 }
 
-function increaseSaturation(r, g, b, factor = 1.2) {
-    const max = Math.max(r, g, b);
+function modifyColor(r, g, b, factor) {
+    // Ändert die Helligkeit und Sättigung der Farbe
     return {
-        r: Math.min(255, r + (max - r) * factor),
-        g: Math.min(255, g + (max - g) * factor),
-        b: Math.min(255, b + (max - b) * factor),
+        r: Math.min(255, Math.max(0, r * factor)),
+        g: Math.min(255, Math.max(0, g * factor)),
+        b: Math.min(255, Math.max(0, b * factor)),
     };
 }
 
@@ -76,34 +76,34 @@ async function setDynamicBackground(imageUrl) {
 
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
+            const colorMap = {};
             const totalPixels = imageData.length / 4;
-            const sectionPixels = Math.floor(totalPixels / 5); // 5 Abschnitte
 
-            const colors = Array(5).fill(0).map(() => ({ r: 0, g: 0, b: 0 })); // Farben initialisieren
-
-            // Farben berechnen
-            for (let section = 0; section < 5; section++) {
-                const startPixel = section * sectionPixels;
-                const endPixel = section === 4 ? totalPixels : (section + 1) * sectionPixels;
-
-                for (let i = startPixel; i < endPixel; i++) {
-                    const offset = i * 4;
-                    colors[section].r += imageData[offset];
-                    colors[section].g += imageData[offset + 1];
-                    colors[section].b += imageData[offset + 2];
-                }
-
-                const pixelCount = section === 4 
-                    ? totalPixels - startPixel 
-                    : sectionPixels;
-
-                colors[section].r = Math.floor(colors[section].r / pixelCount);
-                colors[section].g = Math.floor(colors[section].g / pixelCount);
-                colors[section].b = Math.floor(colors[section].b / pixelCount);
-
-                // Farbsättigung erhöhen
-                colors[section] = increaseSaturation(colors[section].r, colors[section].g, colors[section].b);
+            // Häufigkeiten der Farben ermitteln
+            for (let i = 0; i < totalPixels; i++) {
+                const offset = i * 4;
+                const r = imageData[offset];
+                const g = imageData[offset + 1];
+                const b = imageData[offset + 2];
+                const key = `${r},${g},${b}`;
+                colorMap[key] = (colorMap[key] || 0) + 1;
             }
+
+            // Dominante Farbe bestimmen
+            const dominantColor = Object.entries(colorMap).reduce((a, b) =>
+                a[1] > b[1] ? a : b
+            )[0].split(",").map(Number);
+
+            const [r, g, b] = dominantColor;
+
+            // Farbvariationen generieren
+            const colors = [
+                modifyColor(r, g, b, 0.8), // Dunkler
+                modifyColor(r, g, b, 1.0), // Original
+                modifyColor(r, g, b, 1.2), // Etwas heller
+                modifyColor(r, g, b, 1.4), // Noch heller
+                modifyColor(r, g, b, 0.6), // Sehr dunkel
+            ];
 
             // CSS-Gradient erstellen
             const gradient = `
@@ -120,7 +120,7 @@ async function setDynamicBackground(imageUrl) {
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
     }
-}    
+}  
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
