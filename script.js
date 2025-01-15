@@ -51,13 +51,35 @@ async function updateNowPlaying() {
     }
 }
 
-function modifyColor(r, g, b, factor) {
-    // Ändert die Helligkeit und Sättigung der Farbe
+function modifyColor(r, g, b, brightnessFactor, saturationFactor) {
+    // Helligkeit und Sättigung anpassen
     return {
-        r: Math.min(255, Math.max(0, r * factor)),
-        g: Math.min(255, Math.max(0, g * factor)),
-        b: Math.min(255, Math.max(0, b * factor)),
+        r: Math.min(255, Math.max(0, r * brightnessFactor)),
+        g: Math.min(255, Math.max(0, g * brightnessFactor)),
+        b: Math.min(255, Math.max(0, b * brightnessFactor)),
     };
+}
+
+function getDominantColors(imageData, numColors = 5) {
+    const colorMap = {};
+    const totalPixels = imageData.length / 4;
+
+    // Häufigkeiten der Farben ermitteln
+    for (let i = 0; i < totalPixels; i++) {
+        const offset = i * 4;
+        const r = imageData[offset];
+        const g = imageData[offset + 1];
+        const b = imageData[offset + 2];
+        const key = `${r},${g},${b}`;
+        colorMap[key] = (colorMap[key] || 0) + 1;
+    }
+
+    // Die häufigsten Farben extrahieren
+    const sortedColors = Object.entries(colorMap)
+        .sort((a, b) => b[1] - a[1]) // Nach Häufigkeit absteigend sortieren
+        .slice(0, numColors); // Die ersten 'numColors' extrahieren
+
+    return sortedColors.map(([color]) => color.split(",").map(Number));
 }
 
 async function setDynamicBackground(imageUrl) {
@@ -76,51 +98,38 @@ async function setDynamicBackground(imageUrl) {
 
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
-            const colorMap = {};
-            const totalPixels = imageData.length / 4;
+            // Die 5 häufigsten Farben im Bild extrahieren
+            const dominantColors = getDominantColors(imageData);
 
-            // Häufigkeiten der Farben ermitteln
-            for (let i = 0; i < totalPixels; i++) {
-                const offset = i * 4;
-                const r = imageData[offset];
-                const g = imageData[offset + 1];
-                const b = imageData[offset + 2];
-                const key = `${r},${g},${b}`;
-                colorMap[key] = (colorMap[key] || 0) + 1;
-            }
+            const colorVariations = [];
 
-            // Dominante Farbe bestimmen
-            const dominantColor = Object.entries(colorMap).reduce((a, b) =>
-                a[1] > b[1] ? a : b
-            )[0].split(",").map(Number);
+            // Für jede Primärfarbe Variationen erzeugen
+            dominantColors.forEach(([r, g, b]) => {
+                // Dunkel, normal, hell und gesättigt
+                colorVariations.push(
+                    modifyColor(r, g, b, 0.6, 1), // Dunkel
+                    modifyColor(r, g, b, 1, 1), // Original
+                    modifyColor(r, g, b, 1.4, 1), // Heller
+                    modifyColor(r, g, b, 1, 1.5), // Mehr Sättigung
+                    modifyColor(r, g, b, 1.2, 0.8) // Weniger gesättigt
+                );
+            });
 
-            const [r, g, b] = dominantColor;
-
-            // Farbvariationen generieren
-            const colors = [
-                modifyColor(r, g, b, 0.8), // Dunkler
-                modifyColor(r, g, b, 1.0), // Original
-                modifyColor(r, g, b, 1.2), // Etwas heller
-                modifyColor(r, g, b, 1.4), // Noch heller
-                modifyColor(r, g, b, 0.6), // Sehr dunkel
-            ];
-
-            // CSS-Gradient erstellen
+            // CSS-Gradient mit den erzeugten Farben
             const gradient = `
-                radial-gradient(ellipse at top left, rgb(${colors[0].r},${colors[0].g},${colors[0].b}), transparent),
-                radial-gradient(ellipse at top right, rgb(${colors[1].r},${colors[1].g},${colors[1].b}), transparent),
-                radial-gradient(ellipse at right bottom, rgb(${colors[2].r},${colors[2].g},${colors[2].b}), transparent),
-                radial-gradient(ellipse at left bottom, rgb(${colors[3].r},${colors[3].g},${colors[3].b}), transparent),
-                radial-gradient(ellipse at center, rgb(${colors[4].r},${colors[4].g},${colors[4].b}), transparent)
+                radial-gradient(ellipse at top left, rgb(${colorVariations[0].r},${colorVariations[0].g},${colorVariations[0].b}), transparent),
+                radial-gradient(ellipse at top right, rgb(${colorVariations[1].r},${colorVariations[1].g},${colorVariations[1].b}), transparent),
+                radial-gradient(ellipse at right bottom, rgb(${colorVariations[2].r},${colorVariations[2].g},${colorVariations[2].b}), transparent),
+                radial-gradient(ellipse at left bottom, rgb(${colorVariations[3].r},${colorVariations[3].g},${colorVariations[3].b}), transparent),
+                radial-gradient(ellipse at center, rgb(${colorVariations[4].r},${colorVariations[4].g},${colorVariations[4].b}), transparent)
             `;
 
             document.body.style.background = gradient;
-            document.body.style.backgroundSize = "300% 300%";
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
     }
-}  
+}
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
