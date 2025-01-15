@@ -51,6 +51,15 @@ async function updateNowPlaying() {
     }
 }
 
+function increaseSaturation(r, g, b, factor = 1.2) {
+    const max = Math.max(r, g, b);
+    return {
+        r: Math.min(255, r + (max - r) * factor),
+        g: Math.min(255, g + (max - g) * factor),
+        b: Math.min(255, b + (max - b) * factor),
+    };
+}
+
 async function setDynamicBackground(imageUrl) {
     try {
         const img = new Image();
@@ -91,6 +100,9 @@ async function setDynamicBackground(imageUrl) {
                 colors[section].r = Math.floor(colors[section].r / pixelCount);
                 colors[section].g = Math.floor(colors[section].g / pixelCount);
                 colors[section].b = Math.floor(colors[section].b / pixelCount);
+
+                // Farbsättigung erhöhen
+                colors[section] = increaseSaturation(colors[section].r, colors[section].g, colors[section].b);
             }
 
             // CSS-Gradient erstellen
@@ -103,13 +115,12 @@ async function setDynamicBackground(imageUrl) {
             `;
 
             document.body.style.background = gradient;
-            document.body.style.backgroundSize = "200% 200%";
+            document.body.style.backgroundSize = "300% 300%";
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
     }
-}
-     
+}    
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
