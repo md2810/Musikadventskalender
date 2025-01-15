@@ -118,7 +118,6 @@ async function setDynamicBackground(imageUrl) {
             const staticColor = `rgb(${r3},${g3},${b3})`;
 
             document.body.style.background = gradient;
-            document.body.style.backgroundColor = staticColor;
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
