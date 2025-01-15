@@ -72,6 +72,38 @@ function generateColorVariations(baseColor) {
     ];
 }
 
+function getDominantColors(imageData, colorCount = 5) {
+    const colorMap = {};
+    const totalPixels = imageData.length / 4;
+
+    // Zähle jede Farbe und speichere sie im colorMap-Objekt
+    for (let i = 0; i < totalPixels; i++) {
+        const offset = i * 4;
+        const r = imageData[offset];
+        const g = imageData[offset + 1];
+        const b = imageData[offset + 2];
+
+        const colorKey = `${r},${g},${b}`; // Farbe als String speichern, um sie eindeutig zu identifizieren
+
+        if (colorMap[colorKey]) {
+            colorMap[colorKey]++;
+        } else {
+            colorMap[colorKey] = 1;
+        }
+    }
+
+    // Konvertiere das colorMap in ein Array und sortiere nach Häufigkeit
+    const sortedColors = Object.entries(colorMap)
+        .map(([colorKey, count]) => {
+            const [r, g, b] = colorKey.split(',').map(Number);
+            return { color: [r, g, b], count };
+        })
+        .sort((a, b) => b.count - a.count); // Sortiere absteigend nach Häufigkeit
+
+    // Extrahiere die top `colorCount` Farben
+    return sortedColors.slice(0, colorCount).map(item => item.color);
+}
+
 async function setDynamicBackground(imageUrl) {
     try {
         const img = new Image();
@@ -135,7 +167,6 @@ async function setDynamicBackground(imageUrl) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
     }
 }
-
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
