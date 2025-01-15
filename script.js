@@ -103,6 +103,7 @@ async function setDynamicBackground(imageUrl) {
             `;
 
             document.body.style.background = gradient;
+            document.body.style.backgroundSize = "200% 200%";
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
