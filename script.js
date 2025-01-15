@@ -51,6 +51,81 @@ async function updateNowPlaying() {
     }
 }
 
+// Eine Funktion, die den K-Means-Algorithmus vereinfacht implementiert
+function kMeansCluster(imageData, k = 5) {
+    const totalPixels = imageData.length / 4;
+    const points = [];
+
+    // Extrahiere alle Pixel als RGB-Punkte
+    for (let i = 0; i < totalPixels; i++) {
+        const offset = i * 4;
+        const r = imageData[offset];
+        const g = imageData[offset + 1];
+        const b = imageData[offset + 2];
+        points.push([r, g, b]);
+    }
+
+    // Initialisiere zufällige "Zentroiden" (K) aus den Punkten
+    let centroids = [];
+    for (let i = 0; i < k; i++) {
+        const randomPoint = points[Math.floor(Math.random() * points.length)];
+        centroids.push(randomPoint);
+    }
+
+    // K-Means-Algorithmus
+    let prevCentroids = Array.from(centroids);
+    let clusters = Array(k).fill().map(() => []);
+
+    let converged = false;
+    while (!converged) {
+        clusters = Array(k).fill().map(() => []); // Leere die Cluster
+
+        // Gruppiere die Punkte basierend auf dem nächsten Centroid
+        for (let point of points) {
+            let closest = -1;
+            let minDistance = Infinity;
+            for (let i = 0; i < k; i++) {
+                const distance = Math.sqrt(
+                    Math.pow(point[0] - centroids[i][0], 2) +
+                    Math.pow(point[1] - centroids[i][1], 2) +
+                    Math.pow(point[2] - centroids[i][2], 2)
+                );
+                if (distance < minDistance) {
+                    closest = i;
+                    minDistance = distance;
+                }
+            }
+            clusters[closest].push(point);
+        }
+
+        // Berechne neue Zentroiden
+        centroids = centroids.map((_, i) => {
+            const cluster = clusters[i];
+            const avgColor = cluster.reduce(
+                (acc, point) => {
+                    acc[0] += point[0];
+                    acc[1] += point[1];
+                    acc[2] += point[2];
+                    return acc;
+                },
+                [0, 0, 0]
+            ).map(sum => sum / cluster.length);
+            return avgColor;
+        });
+
+        // Überprüfe, ob die Zentroiden sich verändert haben
+        converged = centroids.every((centroid, i) => 
+            Math.abs(centroid[0] - prevCentroids[i][0]) < 1 &&
+            Math.abs(centroid[1] - prevCentroids[i][1]) < 1 &&
+            Math.abs(centroid[2] - prevCentroids[i][2]) < 1
+        );
+
+        prevCentroids = Array.from(centroids);
+    }
+
+    return centroids;
+}
+
 function modifyColor(r, g, b, brightnessFactor, saturationFactor) {
     // Helligkeit und Sättigung anpassen
     return {
@@ -58,28 +133,6 @@ function modifyColor(r, g, b, brightnessFactor, saturationFactor) {
         g: Math.min(255, Math.max(0, g * brightnessFactor)),
         b: Math.min(255, Math.max(0, b * brightnessFactor)),
     };
-}
-
-function getDominantColors(imageData, numColors = 5) {
-    const colorMap = {};
-    const totalPixels = imageData.length / 4;
-
-    // Häufigkeiten der Farben ermitteln
-    for (let i = 0; i < totalPixels; i++) {
-        const offset = i * 4;
-        const r = imageData[offset];
-        const g = imageData[offset + 1];
-        const b = imageData[offset + 2];
-        const key = `${r},${g},${b}`;
-        colorMap[key] = (colorMap[key] || 0) + 1;
-    }
-
-    // Die häufigsten Farben extrahieren
-    const sortedColors = Object.entries(colorMap)
-        .sort((a, b) => b[1] - a[1]) // Nach Häufigkeit absteigend sortieren
-        .slice(0, numColors); // Die ersten 'numColors' extrahieren
-
-    return sortedColors.map(([color]) => color.split(",").map(Number));
 }
 
 async function setDynamicBackground(imageUrl) {
@@ -98,8 +151,8 @@ async function setDynamicBackground(imageUrl) {
 
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
-            // Die 5 häufigsten Farben im Bild extrahieren
-            const dominantColors = getDominantColors(imageData);
+            // Cluster mit K-Means (5 Cluster)
+            const dominantColors = kMeansCluster(imageData, 5);
 
             const colorVariations = [];
 
@@ -107,9 +160,9 @@ async function setDynamicBackground(imageUrl) {
             dominantColors.forEach(([r, g, b]) => {
                 // Dunkel, normal, hell und gesättigt
                 colorVariations.push(
-                    modifyColor(r, g, b, 0.6, 1), // Dunkel
+                    modifyColor(r, g, b, 0.5, 1), // Dunkel
                     modifyColor(r, g, b, 1, 1), // Original
-                    modifyColor(r, g, b, 1.4, 1), // Heller
+                    modifyColor(r, g, b, 1.5, 1), // Heller
                     modifyColor(r, g, b, 1, 1.5), // Mehr Sättigung
                     modifyColor(r, g, b, 1.2, 0.8) // Weniger gesättigt
                 );
@@ -125,6 +178,7 @@ async function setDynamicBackground(imageUrl) {
             `;
 
             document.body.style.background = gradient;
+            document.body.style.backgroundSize = "300% 300%";
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
