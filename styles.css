@@ -196,11 +196,11 @@ body {
  margin: 0;
  padding: 0;
  background: ‚
- radial-gradient(ellipse at top, #8B0000),
- radial-gradient(ellipse at right, #FF0000),
- radial-gradient(ellipse at left, #FF6347);
+ radial-gradient(ellipse at top, #8B0000, transparent),
+ radial-gradient(ellipse at right, #FF0000, transparent),
+ radial-gradient(ellipse at left, #FF6347, transparent);
  background-size: 300% 300%;
- animation: moveBackground 30s infinite alternate ease-in-out;
+ animation: moveBackground 20s infinite linear;
  display: flex;
  flex-direction: column;
  align-items: center;
