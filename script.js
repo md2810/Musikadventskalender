@@ -112,10 +112,13 @@ async function setDynamicBackground(imageUrl) {
             b3 = Math.floor(b3 / (totalPixels - sectionPixels * 2));
 
             // CSS-Gradient erstellen
-            const gradient = `radial-gradient(circle, rgb(${r1},${g1},${b1}), rgb(${r2},${g2},${b2}), rgb(${r3},${g3},${b3}))`;
+            const gradient = `radial-gradient(ellipse at top, rgb(${r1},${g1},${b1})),
+                                radial-gradient(ellipse at right, rgb(${r2},${g2},${b2}),
+                                radial-gradient(ellipse at left, rgb(${r3},${g3},${b3});`;
             const staticColor = `rgb(${r3},${g3},${b3})`;
 
             document.body.style.background = gradient;
+            document.body.style.backgroundColor = staticColor;
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
