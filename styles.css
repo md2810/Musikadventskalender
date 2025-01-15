@@ -195,10 +195,12 @@ body {
  font-family: 'Product Sans', sans-serif;
  margin: 0;
  padding: 0;
- background: ‚
- radial-gradient(ellipse at top, #8B0000, transparent),
- radial-gradient(ellipse at right, #FF0000, transparent),
- radial-gradient(ellipse at left, #FF6347, transparent);
+ background: 
+ radial-gradient(ellipse at top left, #D32F2F, transparent),
+ radial-gradient(ellipse at top right, #FFA000, transparent),
+ radial-gradient(ellipse at right bottom, #0288D1, transparent),
+ radial-gradient(ellipse at left bottom, #388E3C, transparent),
+ radial-gradient(ellipse at center, #FBC02D, transparent);
  background-size: 300% 300%;
  animation: moveBackground 20s infinite linear;
  display: flex;
@@ -218,13 +220,13 @@ body {
     background-position: 0% 0%;
   }
   25% {
-    background-position: 50% 0%;
+    background-position: 100% 0%;
   }
   50% {
-    background-position: 50% 50%;
+    background-position: 100% 100%;
   }
   75% {
-    background-position: 0% 50%;
+    background-position: 0% 100%;
   }
   100% {
     background-position: 0% 0%;

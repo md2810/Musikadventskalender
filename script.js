@@ -67,61 +67,48 @@ async function setDynamicBackground(imageUrl) {
 
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
-            let r1 = 0, g1 = 0, b1 = 0;
-            let r2 = 0, g2 = 0, b2 = 0;
-            let r3 = 0, g3 = 0, b3 = 0;
-
             const totalPixels = imageData.length / 4;
-            const sectionPixels = Math.floor(totalPixels / 3); // Aufteilung in Drittel
+            const sectionPixels = Math.floor(totalPixels / 5); // 5 Abschnitte
 
-            // Erste Farbe (oberes Drittel)
-            for (let i = 0; i < sectionPixels; i++) {
-                const offset = i * 4;
-                r1 += imageData[offset];
-                g1 += imageData[offset + 1];
-                b1 += imageData[offset + 2];
+            const colors = Array(5).fill(0).map(() => ({ r: 0, g: 0, b: 0 })); // Farben initialisieren
+
+            // Farben berechnen
+            for (let section = 0; section < 5; section++) {
+                const startPixel = section * sectionPixels;
+                const endPixel = section === 4 ? totalPixels : (section + 1) * sectionPixels;
+
+                for (let i = startPixel; i < endPixel; i++) {
+                    const offset = i * 4;
+                    colors[section].r += imageData[offset];
+                    colors[section].g += imageData[offset + 1];
+                    colors[section].b += imageData[offset + 2];
+                }
+
+                const pixelCount = section === 4 
+                    ? totalPixels - startPixel 
+                    : sectionPixels;
+
+                colors[section].r = Math.floor(colors[section].r / pixelCount);
+                colors[section].g = Math.floor(colors[section].g / pixelCount);
+                colors[section].b = Math.floor(colors[section].b / pixelCount);
             }
-
-            // Zweite Farbe (mittleres Drittel)
-            for (let i = sectionPixels; i < sectionPixels * 2; i++) {
-                const offset = i * 4;
-                r2 += imageData[offset];
-                g2 += imageData[offset + 1];
-                b2 += imageData[offset + 2];
-            }
-
-            // Dritte Farbe (unteres Drittel)
-            for (let i = sectionPixels * 2; i < totalPixels; i++) {
-                const offset = i * 4;
-                r3 += imageData[offset];
-                g3 += imageData[offset + 1];
-                b3 += imageData[offset + 2];
-            }
-
-            // Durchschnittswerte berechnen
-            r1 = Math.floor(r1 / sectionPixels);
-            g1 = Math.floor(g1 / sectionPixels);
-            b1 = Math.floor(b1 / sectionPixels);
-
-            r2 = Math.floor(r2 / sectionPixels);
-            g2 = Math.floor(g2 / sectionPixels);
-            b2 = Math.floor(b2 / sectionPixels);
-
-            r3 = Math.floor(r3 / (totalPixels - sectionPixels * 2));
-            g3 = Math.floor(g3 / (totalPixels - sectionPixels * 2));
-            b3 = Math.floor(b3 / (totalPixels - sectionPixels * 2));
 
             // CSS-Gradient erstellen
-            const gradient = `radial-gradient(ellipse at top, rgb(${r1},${g1},${b1}), transparent),
-                                radial-gradient(ellipse at right, rgb(${r2},${g2},${b2}), transparent),
-                                radial-gradient(ellipse at left, rgb(${r3},${g3},${b3}), transparent)`;
+            const gradient = `
+                radial-gradient(ellipse at top left, rgb(${colors[0].r},${colors[0].g},${colors[0].b}), transparent),
+                radial-gradient(ellipse at top right, rgb(${colors[1].r},${colors[1].g},${colors[1].b}), transparent),
+                radial-gradient(ellipse at right bottom, rgb(${colors[2].r},${colors[2].g},${colors[2].b}), transparent),
+                radial-gradient(ellipse at left bottom, rgb(${colors[3].r},${colors[3].g},${colors[3].b}), transparent),
+                radial-gradient(ellipse at center, rgb(${colors[4].r},${colors[4].g},${colors[4].b}), transparent)
+            `;
 
             document.body.style.background = gradient;
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
     }
-}         
+}
+     
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
@@ -168,12 +155,6 @@ function showAdIfRequested() {
     }
 }
 
-function randomBackgroundMovement() {
-    const x = Math.random() * 100; // Zufällige X-Position (0–100%)
-    const y = Math.random() * 100; // Zufällige Y-Position (0–100%)
-    document.body.style.backgroundPosition = `${x}% ${y}%`;
-  }
-
 document.addEventListener("DOMContentLoaded", () => {
     // Eventlistener für Tastatureingaben
     document.addEventListener("keydown", (event) => {
@@ -200,7 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("load", () => {
     adjustFontSizeAndPadding();
     setInterval(updateNowPlaying, 1000);
-    setInterval(randomBackgroundMovement, 5000);
 });
 
 window.addEventListener("resize", adjustFontSizeAndPadding);
