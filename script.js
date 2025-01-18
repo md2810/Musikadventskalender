@@ -51,6 +51,56 @@ async function updateNowPlaying() {
     }
 }
 
+function modifyColor(r, g, b, brightnessFactor, saturationFactor) {
+    // Helligkeit anpassen
+    r = Math.min(255, Math.max(0, r * brightnessFactor));
+    g = Math.min(255, Math.max(0, g * brightnessFactor));
+    b = Math.min(255, Math.max(0, b * brightnessFactor));
+
+    // Sättigung anpassen
+    let max = Math.max(r, g, b);
+    let min = Math.min(r, g, b);
+    let delta = max - min;
+
+    let l = (max + min) / 2; // Helligkeit
+    let s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    // Sättigung skalieren
+    s = Math.min(1, s * saturationFactor);
+
+    // Umrechnung zurück in RGB (Basisformel)
+    let tempR = r, tempG = g, tempB = b;
+    if (delta !== 0) {
+        let hue = 0;
+        if (max === r) {
+            hue = (g - b) / delta;
+        } else if (max === g) {
+            hue = (b - r) / delta + 2;
+        } else if (max === b) {
+            hue = (r - g) / delta + 4;
+        }
+        hue = (hue / 6) % 1;
+
+        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q;
+
+        tempR = Math.round(255 * hueToRGB(p, q, hue + 1 / 3));
+        tempG = Math.round(255 * hueToRGB(p, q, hue));
+        tempB = Math.round(255 * hueToRGB(p, q, hue - 1 / 3));
+    }
+
+    return { r: tempR, g: tempG, b: tempB };
+}
+
+function hueToRGB(p, q, t) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+}
+
 function isColorInRange(color, referenceColor, tolerance) {
     const [r, g, b] = color;
     const [refR, refG, refB] = referenceColor;
