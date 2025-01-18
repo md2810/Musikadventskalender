@@ -51,109 +51,6 @@ async function updateNowPlaying() {
     }
 }
 
-function modifyColor(r, g, b, brightnessFactor, saturationFactor) {
-    // Helligkeit anpassen
-    r = Math.min(255, Math.max(0, r * brightnessFactor));
-    g = Math.min(255, Math.max(0, g * brightnessFactor));
-    b = Math.min(255, Math.max(0, b * brightnessFactor));
-
-    // Sättigung anpassen
-    let max = Math.max(r, g, b);
-    let min = Math.min(r, g, b);
-    let delta = max - min;
-
-    let l = (max + min) / 2; // Helligkeit
-    let s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
-
-    // Sättigung skalieren
-    s = Math.min(1, s * saturationFactor);
-
-    // Umrechnung zurück in RGB (Basisformel)
-    let tempR = r, tempG = g, tempB = b;
-    if (delta !== 0) {
-        let hue = 0;
-        if (max === r) {
-            hue = (g - b) / delta;
-        } else if (max === g) {
-            hue = (b - r) / delta + 2;
-        } else if (max === b) {
-            hue = (r - g) / delta + 4;
-        }
-        hue = (hue / 6) % 1;
-
-        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        let p = 2 * l - q;
-
-        tempR = Math.round(255 * hueToRGB(p, q, hue + 1 / 3));
-        tempG = Math.round(255 * hueToRGB(p, q, hue));
-        tempB = Math.round(255 * hueToRGB(p, q, hue - 1 / 3));
-    }
-
-    return { r: tempR, g: tempG, b: tempB };
-}
-
-function hueToRGB(p, q, t) {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-}
-
-function isColorInRange(color, referenceColor, tolerance) {
-    const [r, g, b] = color;
-    const [refR, refG, refB] = referenceColor;
-    return (
-        Math.abs(r - refR) <= tolerance &&
-        Math.abs(g - refG) <= tolerance &&
-        Math.abs(b - refB) <= tolerance
-    );
-}
-
-function generateColorVariations(baseColor) {
-    const [r, g, b] = baseColor;
-    return [
-        modifyColor(r, g, b, 0.5, 1), // Dunkel
-        modifyColor(r, g, b, 1, 1),   // Original
-        modifyColor(r, g, b, 1.5, 1), // Heller
-        modifyColor(r, g, b, 1, 1.5), // Mehr Sättigung
-        modifyColor(r, g, b, 1.2, 0.8), // Weniger gesättigt
-    ];
-}
-
-function getDominantColors(imageData, colorCount = 5) {
-    const colorMap = {};
-    const totalPixels = imageData.length / 4;
-
-    // Zähle jede Farbe und speichere sie im colorMap-Objekt
-    for (let i = 0; i < totalPixels; i++) {
-        const offset = i * 4;
-        const r = imageData[offset];
-        const g = imageData[offset + 1];
-        const b = imageData[offset + 2];
-
-        const colorKey = `${r},${g},${b}`; // Farbe als String speichern, um sie eindeutig zu identifizieren
-
-        if (colorMap[colorKey]) {
-            colorMap[colorKey]++;
-        } else {
-            colorMap[colorKey] = 1;
-        }
-    }
-
-    // Konvertiere das colorMap in ein Array und sortiere nach Häufigkeit
-    const sortedColors = Object.entries(colorMap)
-        .map(([colorKey, count]) => {
-            const [r, g, b] = colorKey.split(',').map(Number);
-            return { color: [r, g, b], count };
-        })
-        .sort((a, b) => b.count - a.count); // Sortiere absteigend nach Häufigkeit
-
-    // Extrahiere die top `colorCount` Farben
-    return sortedColors.slice(0, colorCount).map(item => item.color);
-}
-
 async function setDynamicBackground(imageUrl) {
     try {
         const img = new Image();
@@ -171,45 +68,10 @@ async function setDynamicBackground(imageUrl) {
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
             // Extrahiere die 5 häufigsten Farben
-            const dominantColors = getDominantColors(imageData);
+            const dominantColors = getDominantColors(imageData, 5);
 
-            const chosenColors = [];
-            const tolerance = 30; // Toleranzbereich (z.B. ±30 für jede Farbe)
-
-            for (let color of dominantColors) {
-                // Wenn die Farbe nicht in den Bereich der bereits gewählten Farben fällt, wähle sie
-                let isValid = true;
-                for (let chosenColor of chosenColors) {
-                    if (isColorInRange(color, chosenColor, tolerance)) {
-                        isValid = false;
-                        break;
-                    }
-                }
-
-                // Wenn gültig, füge sie der Liste der gewählten Farben hinzu
-                if (isValid) {
-                    chosenColors.push(color);
-                }
-
-                // Wenn wir 5 gültige Farben haben, stoppen wir
-                if (chosenColors.length >= 5) break;
-            }
-
-            // Erzeuge Variationen für jede Primärfarbe
-            const colorVariations = [];
-            chosenColors.forEach(([r, g, b]) => {
-                const variations = generateColorVariations([r, g, b]);
-                colorVariations.push(...variations);
-            });
-
-            // CSS-Gradient mit den erzeugten Farben
-            const gradient = `
-                radial-gradient(ellipse at top left, rgb(${colorVariations[0].r},${colorVariations[0].g},${colorVariations[0].b}), transparent),
-                radial-gradient(ellipse at top right, rgb(${colorVariations[1].r},${colorVariations[1].g},${colorVariations[1].b}), transparent),
-                radial-gradient(ellipse at right bottom, rgb(${colorVariations[2].r},${colorVariations[2].g},${colorVariations[2].b}), transparent),
-                radial-gradient(ellipse at left bottom, rgb(${colorVariations[3].r},${colorVariations[3].g},${colorVariations[3].b}), transparent),
-                radial-gradient(ellipse at center, rgb(${colorVariations[4].r},${colorVariations[4].g},${colorVariations[4].b}), transparent)
-            `;
+            // CSS-Gradient mit den extrahierten Farben
+            const gradient = generateGradient(dominantColors);
 
             document.body.style.background = gradient;
         };
@@ -217,6 +79,92 @@ async function setDynamicBackground(imageUrl) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
     }
 }
+
+// Hilfsfunktion: Extrahiere dominante Farben mit K-Means Clustering
+function getDominantColors(data, colorCount) {
+    const rgbArray = [];
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        rgbArray.push([r, g, b]);
+    }
+
+    // Nutze ein K-Means-Clustering-Algorithmus
+    return kMeans(rgbArray, colorCount);
+}
+
+// Hilfsfunktion: K-Means Clustering Algorithmus
+function kMeans(data, k) {
+    const centroids = initializeCentroids(data, k);
+    let clusters = new Array(k);
+    let iterations = 0;
+
+    while (iterations < 10) {
+        clusters = data.map((color) => {
+            let minDist = Infinity;
+            let clusterIdx = 0;
+            centroids.forEach((centroid, idx) => {
+                const dist = colorDistance(color, centroid);
+                if (dist < minDist) {
+                    minDist = dist;
+                    clusterIdx = idx;
+                }
+            });
+            return clusterIdx;
+        });
+
+        centroids.forEach((_, idx) => {
+            const clusterColors = data.filter((_, i) => clusters[i] === idx);
+            if (clusterColors.length > 0) {
+                centroids[idx] = averageColor(clusterColors);
+            }
+        });
+
+        iterations++;
+    }
+
+    return centroids;
+}
+
+// Hilfsfunktion: Berechne die durchschnittliche Farbe
+function averageColor(colors) {
+    const total = colors.reduce(
+        (sum, color) => [sum[0] + color[0], sum[1] + color[1], sum[2] + color[2]],
+        [0, 0, 0]
+    );
+    return total.map((sum) => Math.round(sum / colors.length));
+}
+
+// Hilfsfunktion: Berechne den Abstand zwischen zwei Farben
+function colorDistance(color1, color2) {
+    return Math.sqrt(
+        (color1[0] - color2[0]) ** 2 +
+        (color1[1] - color2[1]) ** 2 +
+        (color1[2] - color2[2]) ** 2
+    );
+}
+
+// Hilfsfunktion: Initialisiere K zufällige Zentroiden
+function initializeCentroids(data, k) {
+    const centroids = [];
+    for (let i = 0; i < k; i++) {
+        centroids.push(data[Math.floor(Math.random() * data.length)]);
+    }
+    return centroids;
+}
+
+// Hilfsfunktion: Erzeuge einen CSS-Gradient
+function generateGradient(colors) {
+    return `
+        radial-gradient(ellipse at top left, rgb(${colors[0].join(",")}), transparent),
+        radial-gradient(ellipse at top right, rgb(${colors[1].join(",")}), transparent),
+        radial-gradient(ellipse at right bottom, rgb(${colors[2].join(",")}), transparent),
+        radial-gradient(ellipse at left bottom, rgb(${colors[3].join(",")}), transparent),
+        radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent)
+    `;
+}
+
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
