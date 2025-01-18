@@ -73,8 +73,9 @@ async function setDynamicBackground(imageUrl) {
             // CSS-Gradient mit den extrahierten Farben
             const gradient = generateGradient(dominantColors);
 
+            
+            document.body.style.backgroundImage = gradient;
             document.body.style.backgroundSize = "300% 300%";
-            document.body.style.background = gradient;
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);

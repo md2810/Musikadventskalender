@@ -195,7 +195,7 @@ body {
  font-family: 'Product Sans', sans-serif;
  margin: 0;
  padding: 0;
- background: 
+ background-image: 
  radial-gradient(ellipse at top left, #D32F2F, transparent),
  radial-gradient(ellipse at top right, #FFA000, transparent),
  radial-gradient(ellipse at right bottom, #0288D1, transparent),
