@@ -73,6 +73,7 @@ async function setDynamicBackground(imageUrl) {
             // CSS-Gradient mit den extrahierten Farben
             const gradient = generateGradient(dominantColors);
 
+            document.body.style.backgroundSize = 300;
             document.body.style.background = gradient;
         };
     } catch (error) {
