@@ -158,14 +158,15 @@ function initializeCentroids(data, k) {
 
 // Hilfsfunktion: Erzeuge einen CSS-Gradient
 function generateGradient(colors) {
-    return 
+    return `
         radial-gradient(ellipse at top left, rgb(${colors[0].join(",")}), transparent),
         radial-gradient(ellipse at top right, rgb(${colors[1].join(",")}), transparent),
         radial-gradient(ellipse at right bottom, rgb(${colors[2].join(",")}), transparent),
         radial-gradient(ellipse at left bottom, rgb(${colors[3].join(",")}), transparent),
         radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent)
-    ;
+    `;
 }
+
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
