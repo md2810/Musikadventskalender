@@ -60,42 +60,43 @@ async function setDynamicBackground(imageUrl) {
         img.onload = () => {
             const canvas = document.createElement("canvas");
             const context = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-            // Bild skalieren für bessere Performance
-            const scaledWidth = 100;
-            const scaledHeight = Math.floor(img.height * (scaledWidth / img.width));
-            canvas.width = scaledWidth;
-            canvas.height = scaledHeight;
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-            context.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
 
-            const imageData = context.getImageData(0, 0, scaledWidth, scaledHeight).data;
-
-            // Hauptfarben extrahieren
+            // Extrahiere die 5 häufigsten Farben
             const dominantColors = getDominantColors(imageData, 5);
 
-            // Farben verbessern: Erhöhe Kontrast und Diversität
-            const enhancedColors = enhanceColors(dominantColors);
+            // CSS-Gradient mit den extrahierten Farben
+            const gradient = generateGradient(dominantColors);
 
-            // Generiere CSS-Gradient
-            const gradient = generateGradient(enhancedColors);
-
-            // Hintergrund anwenden
+            
             document.body.style.backgroundImage = gradient;
-            document.body.style.backgroundSize = "200% 200%";
-            document.body.style.animation = "moveBackground 15s infinite linear";
-        };
-
-        img.onerror = () => {
-            console.error("Bild konnte nicht geladen werden. Fallback-Hintergrund wird gesetzt.");
-            setFallbackBackground();
+            document.body.style.backgroundSize = "300% 300%";
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
-        setFallbackBackground();
     }
 }
 
+// Hilfsfunktion: Extrahiere dominante Farben mit K-Means Clustering
+function getDominantColors(data, colorCount) {
+    const rgbArray = [];
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        rgbArray.push([r, g, b]);
+    }
+
+    // Nutze ein K-Means-Clustering-Algorithmus
+    return kMeans(rgbArray, colorCount);
+}
+
+// Hilfsfunktion: K-Means Clustering Algorithmus
 function kMeans(data, k) {
     const centroids = initializeCentroids(data, k);
     let clusters = new Array(k);
@@ -128,6 +129,16 @@ function kMeans(data, k) {
     return centroids;
 }
 
+// Hilfsfunktion: Berechne die durchschnittliche Farbe
+function averageColor(colors) {
+    const total = colors.reduce(
+        (sum, color) => [sum[0] + color[0], sum[1] + color[1], sum[2] + color[2]],
+        [0, 0, 0]
+    );
+    return total.map((sum) => Math.round(sum / colors.length));
+}
+
+// Hilfsfunktion: Berechne den Abstand zwischen zwei Farben
 function colorDistance(color1, color2) {
     return Math.sqrt(
         (color1[0] - color2[0]) ** 2 +
@@ -145,57 +156,16 @@ function initializeCentroids(data, k) {
     return centroids;
 }
 
-function getDominantColors(data, colorCount) {
-    const rgbArray = [];
-    for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        rgbArray.push([r, g, b]);
-    }
-
-    // Nutze ein K-Means-Clustering-Algorithmus
-    return kMeans(rgbArray, colorCount);
-}
-
-// Fallback-Hintergrund
-function setFallbackBackground() {
-    document.body.style.backgroundImage = `
-        radial-gradient(ellipse at top left, #D32F2F, transparent),
-        radial-gradient(ellipse at top right, #FFA000, transparent),
-        radial-gradient(ellipse at right bottom, #0288D1, transparent),
-        radial-gradient(ellipse at left bottom, #388E3C, transparent),
-        radial-gradient(ellipse at center, #FBC02D, transparent)
-    `;
-    document.body.style.backgroundSize = "200% 200%";
-    document.body.style.animation = "moveBackground 15s infinite linear";
-}
-
-// Farben optimieren (Kontrast und Diversität)
-function enhanceColors(colors) {
-    return colors.map(([r, g, b]) => {
-        const adjust = (value, factor) =>
-            Math.min(255, Math.max(0, value + factor));
-        return [
-            adjust(r, Math.random() * 50 - 25), // Variiere Rot leicht
-            adjust(g, Math.random() * 50 - 25), // Variiere Grün leicht
-            adjust(b, Math.random() * 50 - 25)  // Variiere Blau leicht
-        ];
-    });
-}
-
-// CSS-Gradient generieren
+// Hilfsfunktion: Erzeuge einen CSS-Gradient
 function generateGradient(colors) {
-    return `
+    return 
         radial-gradient(ellipse at top left, rgb(${colors[0].join(",")}), transparent),
         radial-gradient(ellipse at top right, rgb(${colors[1].join(",")}), transparent),
         radial-gradient(ellipse at right bottom, rgb(${colors[2].join(",")}), transparent),
         radial-gradient(ellipse at left bottom, rgb(${colors[3].join(",")}), transparent),
         radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent)
-    `;
+    ;
 }
-
-
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
