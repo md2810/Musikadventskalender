@@ -96,6 +96,19 @@ async function setDynamicBackground(imageUrl) {
     }
 }
 
+function getDominantColors(data, colorCount) {
+    const rgbArray = [];
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        rgbArray.push([r, g, b]);
+    }
+
+    // Nutze ein K-Means-Clustering-Algorithmus
+    return kMeans(rgbArray, colorCount);
+}
+
 // Fallback-Hintergrund
 function setFallbackBackground() {
     document.body.style.backgroundImage = `
