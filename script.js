@@ -128,6 +128,23 @@ function kMeans(data, k) {
     return centroids;
 }
 
+function colorDistance(color1, color2) {
+    return Math.sqrt(
+        (color1[0] - color2[0]) ** 2 +
+        (color1[1] - color2[1]) ** 2 +
+        (color1[2] - color2[2]) ** 2
+    );
+}
+
+// Hilfsfunktion: Initialisiere K zufällige Zentroiden
+function initializeCentroids(data, k) {
+    const centroids = [];
+    for (let i = 0; i < k; i++) {
+        centroids.push(data[Math.floor(Math.random() * data.length)]);
+    }
+    return centroids;
+}
+
 function getDominantColors(data, colorCount) {
     const rgbArray = [];
     for (let i = 0; i < data.length; i += 4) {
