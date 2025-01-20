@@ -96,6 +96,38 @@ async function setDynamicBackground(imageUrl) {
     }
 }
 
+function kMeans(data, k) {
+    const centroids = initializeCentroids(data, k);
+    let clusters = new Array(k);
+    let iterations = 0;
+
+    while (iterations < 10) {
+        clusters = data.map((color) => {
+            let minDist = Infinity;
+            let clusterIdx = 0;
+            centroids.forEach((centroid, idx) => {
+                const dist = colorDistance(color, centroid);
+                if (dist < minDist) {
+                    minDist = dist;
+                    clusterIdx = idx;
+                }
+            });
+            return clusterIdx;
+        });
+
+        centroids.forEach((_, idx) => {
+            const clusterColors = data.filter((_, i) => clusters[i] === idx);
+            if (clusterColors.length > 0) {
+                centroids[idx] = averageColor(clusterColors);
+            }
+        });
+
+        iterations++;
+    }
+
+    return centroids;
+}
+
 function getDominantColors(data, colorCount) {
     const rgbArray = [];
     for (let i = 0; i < data.length; i += 4) {
