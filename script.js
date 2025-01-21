@@ -73,8 +73,11 @@ async function setDynamicBackground(imageUrl) {
             // CSS-Gradient mit den extrahierten Farben
             const gradient = generateGradient(dominantColors);
 
+            const backgroundColor = generateBackgroundColor(dominantColors);
+
             
             document.body.style.backgroundImage = gradient;
+            document.body.style.backgroundColor = backgroundColor;
             document.body.style.backgroundSize = "300% 300%";
         };
     } catch (error) {
@@ -165,6 +168,10 @@ function generateGradient(colors) {
         radial-gradient(ellipse at left bottom, rgb(${colors[3].join(",")}), transparent),
         radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent)
     `;
+}
+
+function generateBackgroundColor(colors) {
+    return `background-colot: rgb(${colors[0].join(",")})`
 }
 
 
