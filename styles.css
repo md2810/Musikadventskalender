@@ -217,29 +217,42 @@
     transition: background-image 1s ease-in-out, background-color 1s ease-in-out; /* Übergang für den Hintergrund */
 }
 
-/* Wenn der Übergang aktiv ist, stoppen wir die Hintergrund-Animation */
-body.transition-active {
-    animation: none; /* Animation pausieren */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: inherit; /* Erbt den aktuellen Hintergrund */
+  background-size: 300% 300%;
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
 }
 
-/* Übergang für das ::after Pseudo-Element */
 body::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Hinter dem Inhalt */
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--new-background); /* Verwendet die CSS-Variable für den neuen Hintergrund */
+  background-size: 300% 300%;
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 }
 
 body.transition-active::after {
-    opacity: 1;
+  opacity: 1; /* Zeigt den neuen Hintergrund an */
 }
+
+body.transition-active::before {
+  opacity: 0; /* Blendet den alten Hintergrund aus */
+}
+
 
 @keyframes moveBackground {
     0% {

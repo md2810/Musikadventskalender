@@ -53,13 +53,15 @@ async function updateNowPlaying() {
 
 async function setDynamicBackground(imageUrl) {
     try {
-        // Deaktiviere die Hintergrund-Animation, um den Übergang korrekt zu setzen
-        document.body.classList.add("transition-active");
-
+        // Erstelle ein neues Image-Objekt
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = imageUrl;
 
+        // Setze den alten Hintergrund als default in ::before
+        document.body.classList.add("transition-active"); // Füge Klasse für Übergang hinzu
+
+        // Warte, bis das Bild vollständig geladen ist
         img.onload = () => {
             const canvas = document.createElement("canvas");
             const context = canvas.getContext("2d");
@@ -73,21 +75,19 @@ async function setDynamicBackground(imageUrl) {
             // Extrahiere die 5 häufigsten Farben
             const dominantColors = getDominantColors(imageData, 5);
 
-            // Generiere den neuen Gradient
+            // Erzeuge den neuen Gradient
             const gradient = generateGradient(dominantColors);
 
-            // Setze den neuen Gradient im Hintergrund des `body`
-            document.body.style.backgroundImage = gradient;
+            // Jetzt den neuen Hintergrund setzen
+            document.body.style.setProperty('--new-background', gradient);  // Neuer Hintergrund über eine CSS-Variable
 
-            // Optional: Du kannst auch die Hintergrundfarbe für den Übergang ändern, falls gewünscht
+            // Optionale Hintergrundfarbe festlegen
             const backgroundColor = generateBackgroundColor(dominantColors);
             document.body.style.backgroundColor = backgroundColor;
+        };
 
-            // Setze die Transition für den nächsten Wechsel
-            setTimeout(() => {
-                // Stelle die Hintergrund-Animation nach dem Übergang wieder ein
-                document.body.classList.remove("transition-active");
-            }, 1000); // Dauer der Transition
+        img.onerror = (err) => {
+            console.error("Fehler beim Laden des Bildes:", err);
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
