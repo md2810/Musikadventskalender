@@ -53,6 +53,9 @@ async function updateNowPlaying() {
 
 async function setDynamicBackground(imageUrl) {
     try {
+        // Deaktiviere die Hintergrund-Animation, um den Übergang korrekt zu setzen
+        document.body.classList.add("transition-active");
+
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = imageUrl;
@@ -70,15 +73,21 @@ async function setDynamicBackground(imageUrl) {
             // Extrahiere die 5 häufigsten Farben
             const dominantColors = getDominantColors(imageData, 5);
 
-            // CSS-Gradient mit den extrahierten Farben
+            // Generiere den neuen Gradient
             const gradient = generateGradient(dominantColors);
 
-            const backgroundColor = generateBackgroundColor(dominantColors);
-
-            
+            // Setze den neuen Gradient im Hintergrund des `body`
             document.body.style.backgroundImage = gradient;
+
+            // Optional: Du kannst auch die Hintergrundfarbe für den Übergang ändern, falls gewünscht
+            const backgroundColor = generateBackgroundColor(dominantColors);
             document.body.style.backgroundColor = backgroundColor;
-            document.body.style.backgroundSize = "300% 300%";
+
+            // Setze die Transition für den nächsten Wechsel
+            setTimeout(() => {
+                // Stelle die Hintergrund-Animation nach dem Übergang wieder ein
+                document.body.classList.remove("transition-active");
+            }, 1000); // Dauer der Transition
         };
     } catch (error) {
         console.error("Fehler beim Generieren des Hintergrunds:", error);
