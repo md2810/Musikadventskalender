@@ -201,8 +201,6 @@
     radial-gradient(ellipse at right bottom, #0288D1, transparent),
     radial-gradient(ellipse at left bottom, #388E3C, transparent),
     radial-gradient(ellipse at center, #FBC02D, transparent);
-    background-size: 300% 300%;
-    animation: moveBackground 20s infinite linear;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -214,62 +212,6 @@
     -moz-osx-font-smoothing: grayscale;  /* Für macOS */
     user-select: none;
     position: relative;
-    transition: background-image 1s ease-in-out, background-color 1s ease-in-out; /* Übergang für den Hintergrund */
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: inherit; /* Erbt den aktuellen Hintergrund */
-  background-size: 300% 300%;
-  z-index: -1;
-  opacity: 1;
-  transition: opacity 1s ease-in-out;
-}
-
-body::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: var(--new-background); /* Verwendet die CSS-Variable für den neuen Hintergrund */
-  background-size: 300% 300%;
-  z-index: -2;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-}
-
-body.transition-active::after {
-  opacity: 1; /* Zeigt den neuen Hintergrund an */
-}
-
-body.transition-active::before {
-  opacity: 0; /* Blendet den alten Hintergrund aus */
-}
-
-
-@keyframes moveBackground {
-    0% {
-        background-position: 0% 0%;
-    }
-    25% {
-        background-position: 100% 0%;
-    }
-    50% {
-        background-position: 100% 100%;
-    }
-    75% {
-        background-position: 0% 100%;
-    }
-    100% {
-        background-position: 0% 0%;
-    }
 }
 
 .cards {

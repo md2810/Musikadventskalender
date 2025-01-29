@@ -83,7 +83,7 @@ async function setDynamicBackground(imageUrl) {
                     tileWidth,
                     tileHeight
                 );
-                colors.push(getAverageColor(imageData));
+                colors.push(getDominantColor(imageData));
             }
         }
 
@@ -104,17 +104,39 @@ async function setDynamicBackground(imageUrl) {
     }
 }
 
-function getAverageColor(imageData) {
-    let r = 0, g = 0, b = 0;
-    let count = imageData.data.length / 4;
+function getDominantColor(imageData) {
+    const colorMap = new Map();
+    const tolerance = 30; // Toleranz für ähnliche Farben
     
-    for (let i = 0; i < imageData.data.length; i += 4) {
-        r += imageData.data[i];
-        g += imageData.data[i + 1];
-        b += imageData.data[i + 2];
+    function findSimilarColor(r, g, b) {
+        for (let [key, value] of colorMap.entries()) {
+            let [kr, kg, kb] = key.split(",").map(Number);
+            if (
+                Math.abs(kr - r) < tolerance &&
+                Math.abs(kg - g) < tolerance &&
+                Math.abs(kb - b) < tolerance
+            ) {
+                return key;
+            }
+        }
+        return null;
     }
     
-    return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1];
+        const b = imageData.data[i + 2];
+        
+        const similarKey = findSimilarColor(r, g, b);
+        if (similarKey) {
+            colorMap.set(similarKey, colorMap.get(similarKey) + 1);
+        } else {
+            colorMap.set(`${r},${g},${b}`, 1);
+        }
+    }
+    
+    let dominantColor = [...colorMap.entries()].reduce((a, b) => (b[1] > a[1] ? b : a))[0];
+    return dominantColor.split(",").map(Number);
 }
 
 function adjustFontSizeAndPadding() {
