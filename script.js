@@ -71,12 +71,13 @@ async function setDynamicBackground(imageUrl) {
         ctx.drawImage(img, 0, 0);
 
         // Bestimme die Tile-Größe
-        const tileWidth = img.width / 3;
-        const tileHeight = img.height / 3;
+        const gridSize = 10;
+        const tileWidth = img.width / gridSize;
+        const tileHeight = img.height / gridSize;
         const colors = [];
 
-        for (let y = 0; y < 3; y++) {
-            for (let x = 0; x < 3; x++) {
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
                 const imageData = ctx.getImageData(
                     x * tileWidth,
                     y * tileHeight,
@@ -88,17 +89,13 @@ async function setDynamicBackground(imageUrl) {
         }
 
         // Setze den Hintergrund mit radialen Gradienten
-        document.body.style.backgroundImage = `
-            radial-gradient(ellipse at top left, rgb(${colors[0].join(",")}), transparent),
-            radial-gradient(ellipse at top center, rgb(${colors[1].join(",")}), transparent),
-            radial-gradient(ellipse at top right, rgb(${colors[2].join(",")}), transparent),
-            radial-gradient(ellipse at center left, rgb(${colors[3].join(",")}), transparent),
-            radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent),
-            radial-gradient(ellipse at center right, rgb(${colors[5].join(",")}), transparent),
-            radial-gradient(ellipse at bottom left, rgb(${colors[6].join(",")}), transparent),
-            radial-gradient(ellipse at bottom center, rgb(${colors[7].join(",")}), transparent),
-            radial-gradient(ellipse at bottom right, rgb(${colors[8].join(",")}), transparent)
-        `;
+        let gradients = colors.map((color, index) => {
+            let xPos = (index % gridSize) / (gridSize - 1) * 100;
+            let yPos = Math.floor(index / gridSize) / (gridSize - 1) * 100;
+            return `radial-gradient(ellipse at ${xPos}% ${yPos}%, rgb(${color.join(",")}), transparent)`;
+        }).join(",\n");
+
+        document.body.style.backgroundImage = gradients;
     } catch (error) {
         console.error("Fehler beim Laden des Bildes:", error);
     }
