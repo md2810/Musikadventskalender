@@ -57,132 +57,65 @@ async function setDynamicBackground(imageUrl) {
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = imageUrl;
-
-        // Setze den alten Hintergrund als default in ::before
-        document.body.classList.add("transition-active"); // Füge Klasse für Übergang hinzu
-
-        // Warte, bis das Bild vollständig geladen ist
-        img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d");
-            canvas.width = img.width;
-            canvas.height = img.height;
-
-            context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-            const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
-
-            // Extrahiere die 5 häufigsten Farben
-            const dominantColors = getDominantColors(imageData, 5);
-
-            // Erzeuge den neuen Gradient
-            const gradient = generateGradient(dominantColors);
-
-            // Jetzt den neuen Hintergrund setzen
-            document.body.style.setProperty('--new-background', gradient);  // Neuer Hintergrund über eine CSS-Variable
-
-            // Optionale Hintergrundfarbe festlegen
-            const backgroundColor = generateBackgroundColor(dominantColors);
-            document.body.style.backgroundColor = backgroundColor;
-        };
-
-        img.onerror = (err) => {
-            console.error("Fehler beim Laden des Bildes:", err);
-        };
-    } catch (error) {
-        console.error("Fehler beim Generieren des Hintergrunds:", error);
-    }
-}
-
-// Hilfsfunktion: Extrahiere dominante Farben mit K-Means Clustering
-function getDominantColors(data, colorCount) {
-    const rgbArray = [];
-    for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        rgbArray.push([r, g, b]);
-    }
-
-    // Nutze ein K-Means-Clustering-Algorithmus
-    return kMeans(rgbArray, colorCount);
-}
-
-// Hilfsfunktion: K-Means Clustering Algorithmus
-function kMeans(data, k) {
-    const centroids = initializeCentroids(data, k);
-    let clusters = new Array(k);
-    let iterations = 0;
-
-    while (iterations < 10) {
-        clusters = data.map((color) => {
-            let minDist = Infinity;
-            let clusterIdx = 0;
-            centroids.forEach((centroid, idx) => {
-                const dist = colorDistance(color, centroid);
-                if (dist < minDist) {
-                    minDist = dist;
-                    clusterIdx = idx;
-                }
-            });
-            return clusterIdx;
+        
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
         });
 
-        centroids.forEach((_, idx) => {
-            const clusterColors = data.filter((_, i) => clusters[i] === idx);
-            if (clusterColors.length > 0) {
-                centroids[idx] = averageColor(clusterColors);
+        // Erstelle ein Canvas-Element
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        // Bestimme die Tile-Größe
+        const tileWidth = img.width / 3;
+        const tileHeight = img.height / 3;
+        const colors = [];
+
+        for (let y = 0; y < 3; y++) {
+            for (let x = 0; x < 3; x++) {
+                const imageData = ctx.getImageData(
+                    x * tileWidth,
+                    y * tileHeight,
+                    tileWidth,
+                    tileHeight
+                );
+                colors.push(getAverageColor(imageData));
             }
-        });
+        }
 
-        iterations++;
+        // Setze den Hintergrund mit radialen Gradienten
+        document.body.style.backgroundImage = `
+            radial-gradient(ellipse at top left, rgb(${colors[0].join(",")}), transparent),
+            radial-gradient(ellipse at top center, rgb(${colors[1].join(",")}), transparent),
+            radial-gradient(ellipse at top right, rgb(${colors[2].join(",")}), transparent),
+            radial-gradient(ellipse at center left, rgb(${colors[3].join(",")}), transparent),
+            radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent),
+            radial-gradient(ellipse at center right, rgb(${colors[5].join(",")}), transparent),
+            radial-gradient(ellipse at bottom left, rgb(${colors[6].join(",")}), transparent),
+            radial-gradient(ellipse at bottom center, rgb(${colors[7].join(",")}), transparent),
+            radial-gradient(ellipse at bottom right, rgb(${colors[8].join(",")}), transparent)
+        `;
+    } catch (error) {
+        console.error("Fehler beim Laden des Bildes:", error);
     }
-
-    return centroids;
 }
 
-// Hilfsfunktion: Berechne die durchschnittliche Farbe
-function averageColor(colors) {
-    const total = colors.reduce(
-        (sum, color) => [sum[0] + color[0], sum[1] + color[1], sum[2] + color[2]],
-        [0, 0, 0]
-    );
-    return total.map((sum) => Math.round(sum / colors.length));
-}
-
-// Hilfsfunktion: Berechne den Abstand zwischen zwei Farben
-function colorDistance(color1, color2) {
-    return Math.sqrt(
-        (color1[0] - color2[0]) ** 2 +
-        (color1[1] - color2[1]) ** 2 +
-        (color1[2] - color2[2]) ** 2
-    );
-}
-
-// Hilfsfunktion: Initialisiere K zufällige Zentroiden
-function initializeCentroids(data, k) {
-    const centroids = [];
-    for (let i = 0; i < k; i++) {
-        centroids.push(data[Math.floor(Math.random() * data.length)]);
+function getAverageColor(imageData) {
+    let r = 0, g = 0, b = 0;
+    let count = imageData.data.length / 4;
+    
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        r += imageData.data[i];
+        g += imageData.data[i + 1];
+        b += imageData.data[i + 2];
     }
-    return centroids;
+    
+    return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
 }
-
-// Hilfsfunktion: Erzeuge einen CSS-Gradient
-function generateGradient(colors) {
-    return `
-        radial-gradient(ellipse at top left, rgb(${colors[0].join(",")}), transparent),
-        radial-gradient(ellipse at top right, rgb(${colors[1].join(",")}), transparent),
-        radial-gradient(ellipse at right bottom, rgb(${colors[2].join(",")}), transparent),
-        radial-gradient(ellipse at left bottom, rgb(${colors[3].join(",")}), transparent),
-        radial-gradient(ellipse at center, rgb(${colors[4].join(",")}), transparent)
-    `;
-}
-
-function generateBackgroundColor(colors) {
-    return `background-colot: rgb(${colors[0].join(",")})`
-}
-
 
 function adjustFontSizeAndPadding() {
     const titleCard = document.querySelector(".title-card");
