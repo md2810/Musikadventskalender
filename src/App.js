@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const MusicAdventCalendar = () => {
   const [nowPlaying, setNowPlaying] = useState(null);
@@ -6,7 +6,6 @@ const MusicAdventCalendar = () => {
   const [showAd, setShowAd] = useState(false);
   const [currentCover, setCurrentCover] = useState('');
   const [backgroundGradients, setBackgroundGradients] = useState('');
-  const canvasRef = useRef(null);
 
   // Check URL parameters on mount
   useEffect(() => {
@@ -43,7 +42,7 @@ const MusicAdventCalendar = () => {
     const tolerance = 30;
     
     function findSimilarColor(r, g, b) {
-      for (let [key, value] of colorMap.entries()) {
+      for (let [key] of colorMap.entries()) {
         let [kr, kg, kb] = key.split(',').map(Number);
         if (
           Math.abs(kr - r) < tolerance &&
