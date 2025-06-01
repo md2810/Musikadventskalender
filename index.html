@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" type="image/png" href="/icon.png">
+    <title>Musikadventskalender</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body onload="refreshLogin(); showAdIfRequested();">
+    <div id="background-overlay"></div>
+    <div class="cards" id="cards">
+        <div class="title-card" id="title-card">
+            <h1>Musikadventskalender</h1>
+        </div>
+
+        <div id="spotify-container">
+            <div id="now-playing" class="spotify-card">
+                <div id="song-cover" class="cover"></div>
+                <div>
+                    <p id="song-title">Kein Song</p>
+                    <p id="artist-name">Keine Wiedergabe</p>
+                </div>
+            </div>
+            <button id="login-button" style="display: none;" onclick="window.location.href='/login'">Spotify Login</button>
+        </div>
+        <div class="not-playing-card" id="not-playing">
+            <h1>Gleich geht's los...</h1>
+        </div>
+    </div>
+
+    <div id="ad-card" class="ad-card">
+        <div class="ad-video">
+            <video id="ad-video" autoplay muted loop>
+                <source src="/ad.mp4" type="video/mp4">
+            </video>
+        </div>
+        <p>Winterball Tickets jetzt erhältlich!</p>
+    </div>
+    <script src="script.js"></script>          
+</body>
+</html>
